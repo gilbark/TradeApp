@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { Product } from "src/app/models/product.model";
 
 @Component({
@@ -8,8 +9,16 @@ import { Product } from "src/app/models/product.model";
 })
 export class ProductPreviewComponent implements OnInit {
   @Input() product: Product;
+  userLoggedIn = true;
+  viewingMyProducts = true;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.router.url === "/my-products") {
+      this.viewingMyProducts = true;
+    } else {
+      this.viewingMyProducts = false;
+    }
+  }
 }

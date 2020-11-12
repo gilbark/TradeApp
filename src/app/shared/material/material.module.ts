@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { IvyCarouselModule } from "angular-responsive-carousel";
+import { EllipsisPipe } from "../ellipsis.pipe";
 
 const matModules: any[] = [
   MatCardModule,
@@ -15,8 +16,8 @@ const matModules: any[] = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [EllipsisPipe],
   imports: [CommonModule, ...matModules],
-  exports: [...matModules],
+  exports: [EllipsisPipe, ...matModules],
 })
 export class MaterialModule {}

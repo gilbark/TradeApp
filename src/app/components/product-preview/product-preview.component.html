@@ -8,7 +8,7 @@
         <span>
           <div class="preview-details">
             <p>{{ product.title }}</p>
-            <p>{{ product.description }}</p>
+            <p>{{ product.description | ellipsis: 200 }}</p>
           </div>
         </span>
       </div>
@@ -22,5 +22,18 @@
         </div>
       </div>
     </div>
+    <mat-card-actions>
+      <button mat-button class="view-more">View More</button>
+      <button
+        mat-button
+        class="offer"
+        *ngIf="userLoggedIn && product.user !== 'Gilb1'"
+      >
+        Offer
+      </button>
+      <button mat-button class="edit" *ngIf="userLoggedIn && viewingMyProducts">
+        Edit
+      </button>
+    </mat-card-actions>
   </mat-card-content>
 </mat-card>

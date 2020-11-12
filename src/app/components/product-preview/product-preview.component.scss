@@ -1,8 +1,31 @@
+mat-card-content {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+mat-card-actions {
+  padding: 15px;
+  margin-left: 355px;
+
+  .offer {
+    background-color: rgb(29, 202, 29);
+    color: white;
+    border-radius: 25px;
+    text-align: center;
+    width: 80px;
+  }
+  .edit {
+    background-color: rgb(4, 160, 207);
+    color: white;
+    border-radius: 25px;
+    text-align: center;
+    width: 80px;
+  }
+}
+
 .preview-container {
   display: flex;
   height: auto;
   padding: 10px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .images {
@@ -14,11 +37,12 @@
   flex: 2;
   margin-left: 50px;
   display: flex;
-  align-items: start;
-  width: 70%;
+  align-items: flex-start;
+  width: 100%;
 }
 .preview-details {
   margin-left: 20px;
+  width: 400px;
 }
 
 .preview-right {

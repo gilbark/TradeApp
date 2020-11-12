@@ -8,12 +8,15 @@ import { RouterModule, Routes } from "@angular/router";
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "product-preview", component: ProductPreviewComponent },
-  { path: "image-carousel", component: ImageCarouselComponent },
+  { path: "my-products", component: HomeComponent },
 ];
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
