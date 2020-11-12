@@ -1,0 +1,44 @@
+mat-toolbar {
+  background-color: #ffc65d;
+}
+
+mat-button {
+  color: black;
+}
+
+.spacer {
+  flex: 0;
+}
+
+ul {
+  flex: 2;
+  width: 100%;
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+  width: 250px;
+  border-bottom: 1px solid black;
+  padding-left: 2px;
+  border-radius: 0;
+  margin-left: 30px;
+}
+
+.active-link {
+  color: black;
+}
+
+.signout {
+  justify-content: flex-end;
+}
+
+.active-link:hover {
+  color: rgb(52, 94, 46);
+}
+.active-link {
+}

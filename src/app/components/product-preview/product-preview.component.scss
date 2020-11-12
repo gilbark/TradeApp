@@ -1,0 +1,26 @@
+.preview-container {
+  display: flex;
+  height: auto;
+  padding: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.images {
+  width: 300px;
+  height: 170px;
+}
+
+.preview-left {
+  flex: 2;
+  margin-left: 50px;
+  display: flex;
+  align-items: start;
+  width: 70%;
+}
+.preview-details {
+  margin-left: 20px;
+}
+
+.preview-right {
+  flex: 1;
+}

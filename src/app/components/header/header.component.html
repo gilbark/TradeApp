@@ -1,0 +1,56 @@
+<mat-toolbar>
+  <span><img src="assets/logo.png" /></span>
+  <span class="spacer"></span>
+  <ul>
+    <li>
+      <a mat-button routerLink="/" routerLinkActive="active-link">Home</a>
+    </li>
+    <li>
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        *ngIf="userIsAuthenticated"
+        >My Products</a
+      >
+    </li>
+    <li>
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        *ngIf="userIsAuthenticated"
+        >My Profile</a
+      >
+    </li>
+
+    <li>
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        *ngIf="!userIsAuthenticated"
+        >Log In</a
+      >
+    </li>
+    <li>
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        *ngIf="!userIsAuthenticated"
+        >Sign Up</a
+      >
+    </li>
+    <li>
+      <a
+        class="signout"
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        *ngIf="userIsAuthenticated"
+        >Sign Out</a
+      >
+    </li>
+  </ul>
+</mat-toolbar>
