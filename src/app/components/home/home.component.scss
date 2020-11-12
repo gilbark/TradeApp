@@ -1,0 +1,23 @@
+.search-input {
+  margin-top: 15px;
+  margin-left: 10px;
+  display: flex;
+  position: relative;
+  width: fit-content;
+  gap: 10px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+input {
+  outline: none;
+  border: 1px solid lightgray;
+  background-color: #f0f2f5;
+  padding: 10px 20px;
+  border-radius: 20px;
+  width: 30vw;
+
+  &::placeholder {
+    font-size: 15px;
+  }
+}
