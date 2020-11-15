@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Product } from "../models/product.model";
 
 @Injectable({
@@ -33,9 +34,19 @@ export class ProductsService {
     },
   ];
 
+  public modalStatusSubject = new Subject<boolean>();
+
   constructor() {}
 
   getProducts() {
     return [...this.products];
+  }
+
+  getModalStatus() {
+    return this.modalStatusSubject.asObservable();
+  }
+
+  modalStatusChanged(status: boolean) {
+    this.modalStatusSubject.next(status);
   }
 }

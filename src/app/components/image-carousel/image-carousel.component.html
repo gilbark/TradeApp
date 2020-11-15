@@ -1,5 +1,8 @@
 <carousel cellsToShow="1" height="100%" cellWidth="200" [dots]="true">
-  <div class="carousel-cell" *ngFor="let image of images">
+  <div
+    class="carousel-cell"
+    *ngFor="let image of images"
+  >
     <img [src]="image.path" />
   </div>
 </carousel>

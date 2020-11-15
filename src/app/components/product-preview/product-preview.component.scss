@@ -48,3 +48,15 @@ mat-card-actions {
 .preview-right {
   flex: 1;
 }
+
+.hide-carousel {
+  display: none;
+}
+.mat-expansion-panel {
+  box-shadow: 0 0 BLACK;
+}
+mat-expansion-panel-header {
+  padding: 0 8px;
+  width: 80px;
+}
+

@@ -1,0 +1,22 @@
+.offer-component {
+  &offer-preview {
+    z-index: 100;
+  }
+}
+
+.offer-product-expansion-header {
+  display: flex;
+}
+
+.image-thumbnail {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+.offer-button {
+  background-color: rgb(29, 202, 29);
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+  width: 80px;
+}

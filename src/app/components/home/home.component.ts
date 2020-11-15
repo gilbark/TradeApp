@@ -10,7 +10,6 @@ import { Router } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
   products: Product[] = [];
-
   constructor(
     private productService: ProductsService,
     private router: Router

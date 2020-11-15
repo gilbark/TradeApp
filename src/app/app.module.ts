@@ -1,3 +1,4 @@
+import { OfferComponent } from "./components/offer/offer.component";
 import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { ProductPreviewComponent } from "./components/product-preview/product-preview.component";
 import { HomeComponent } from "./components/home/home.component";
@@ -15,6 +16,7 @@ import { FormsModule } from "@angular/forms";
     AppComponent,
     HomeComponent,
     HeaderComponent,
+    OfferComponent,
     ProductPreviewComponent,
     ImageCarouselComponent,
   ],

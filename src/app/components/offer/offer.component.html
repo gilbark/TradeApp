@@ -1,0 +1,15 @@
+<div class="offer-component">
+  <mat-accordion [multi]="false">
+    <mat-expansion-panel *ngFor="let product of products">
+      <mat-expansion-panel-header
+        ><div class="offer-product-expansion-header">
+          <img class="image-thumbnail" [src]="product.images[0].path" />
+          {{ product.title }}
+        </div>
+      </mat-expansion-panel-header>
+      <div>
+        <button mat-button class="offer-button">Confirm</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

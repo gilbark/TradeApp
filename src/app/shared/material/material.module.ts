@@ -6,18 +6,21 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { IvyCarouselModule } from "angular-responsive-carousel";
 import { EllipsisPipe } from "../ellipsis.pipe";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 const matModules: any[] = [
   MatCardModule,
   MatIconModule,
   MatToolbarModule,
   MatButtonModule,
-  IvyCarouselModule,
+  MatExpansionModule,
+  MatDialogModule,
 ];
 
 @NgModule({
   declarations: [EllipsisPipe],
   imports: [CommonModule, ...matModules],
-  exports: [EllipsisPipe, ...matModules],
+  exports: [EllipsisPipe, IvyCarouselModule, ...matModules],
 })
 export class MaterialModule {}
