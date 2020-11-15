@@ -1,8 +1,13 @@
-<div class="search-input">
+<div class="search-input" *ngIf="!inMyProducts">
   <mat-icon class="search-icon">search_outline</mat-icon>
   <form>
     <input placeholder="Search by tag. E.g. guitar, amp, fender" type="text" />
   </form>
+</div>
+<div class="add-new" *ngIf="inMyProducts">
+  <button mat-button class="add-new-button" [routerLink]="['/new']">
+    <mat-icon>add</mat-icon>Add Product
+  </button>
 </div>
 <app-product-preview
   *ngFor="let product of products"

@@ -1,0 +1,29 @@
+<div class="product-container">
+  <div class="product-info-left">
+    <div class="images">
+      <app-image-carousel [images]="product.images"></app-image-carousel>
+    </div>
+    <span>
+      <div class="product-info-details">
+        <h1>{{ product.title }}</h1>
+        <p>{{ product.description }}</p>
+        <hr />
+        <p>Condition: {{ product.condition }}</p>
+      </div>
+    </span>
+  </div>
+  <div class="product-info-right">
+    <div class="user-details">
+      <h4>{{ product.user }}</h4>
+      <div class="user-rating">
+        <p>User rating</p>
+        <p>{{ product.rating }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="offer-section">
+  <h1>Offer one of your products:</h1>
+  <app-offer></app-offer>
+</div>

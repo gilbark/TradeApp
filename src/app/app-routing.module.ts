@@ -1,3 +1,5 @@
+import { EditProductComponent } from "./components/edit-product/edit-product.component";
+import { ProductPageComponent } from "./components/product-page/product-page.component";
 import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { ProductPreviewComponent } from "./components/product-preview/product-preview.component";
 import { HomeComponent } from "./components/home/home.component";
@@ -9,6 +11,9 @@ const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "product-preview", component: ProductPreviewComponent },
   { path: "my-products", component: HomeComponent },
+  { path: "view/:id", component: ProductPageComponent },
+  { path: "view/:id/edit", component: EditProductComponent },
+  { path: "new", component: EditProductComponent },
 ];
 
 @NgModule({

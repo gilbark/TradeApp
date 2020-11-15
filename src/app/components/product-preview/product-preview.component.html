@@ -4,17 +4,19 @@
       <div class="preview-left">
         <div class="images">
           <app-image-carousel [images]="product.images"></app-image-carousel>
+          <hr />
+          <i>Condition: {{ product.condition }}</i>
         </div>
         <span>
           <div class="preview-details">
-            <p>{{ product.title }}</p>
+            <h1>{{ product.title }}</h1>
             <p>{{ product.description | ellipsis: 200 }}</p>
           </div>
         </span>
       </div>
       <div class="preview-right">
         <div class="user-details">
-          <p>{{ product.user }}</p>
+          <h4>{{ product.user }}</h4>
           <div class="user-rating">
             <p>User rating</p>
             <p>{{ product.rating }}</p>
@@ -23,11 +25,18 @@
       </div>
     </div>
     <mat-card-actions>
-      <button mat-button class="view-more">View More</button>
+      <a mat-button class="view-more" [routerLink]="['view', product.id]">
+        View More
+      </a>
 
-      <button mat-button class="edit" *ngIf="userLoggedIn && viewingMyProducts">
+      <a
+        [routerLink]="['/view', product.id, 'edit']"
+        mat-button
+        class="edit"
+        *ngIf="userLoggedIn && viewingMyProducts"
+      >
         Edit
-      </button>
+      </a>
 
       <mat-accordion *ngIf="userLoggedIn && product.user !== 'Gilb1'">
         <mat-expansion-panel hideToggle="true">
@@ -36,7 +45,6 @@
               mat-button
               class="offer"
               *ngIf="userLoggedIn && product.user !== 'Gilb1'"
-              (click)="openOfferModal()"
             >
               Offer
             </button></mat-expansion-panel-header

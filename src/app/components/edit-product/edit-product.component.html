@@ -1,0 +1,74 @@
+<mat-card>
+  <div class="edit-form">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <button mat-button class="save-changes" type="submit">
+        <mat-icon style="margin-right: 5px">check</mat-icon> Save Changes
+      </button>
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="title"
+          type="text"
+          required
+          placeholder="Product Title"
+          name="title"
+          #titleInput
+        />
+        <mat-error *ngIf="titleInput.invalid">Please enter a title</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea
+          type="text"
+          matInput
+          id="description"
+          formControlName="description"
+          required
+          placeholder="Product Description"
+          name="description"
+          #descriptionInput
+          (keyup)="textInputChanged($event)"
+        ></textarea>
+        <span class="character-count">{{ textCount }}</span>
+        <mat-error *ngIf="descriptionInput.invalid"
+          >Please enter a valid description (at least 20 characters
+          long)</mat-error
+        >
+      </mat-form-field>
+
+      <div>
+        <button mat-stroked-button type="button" (click)="filePicker.click()">
+          Select images
+        </button>
+        <input
+          type="file"
+          id="images"
+          name="images"
+          #filePicker
+          (change)="onImagePicked($event)"
+          multiple
+        />
+      </div>
+      <div class="image-preview">
+        <div *ngFor="let url of imageUrls; let i = index">
+          <img [src]="url" alt="" />
+          <p class="delete-image-text" (click)="removeImage(i)">Delete</p>
+        </div>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Condition</mat-label>
+        <mat-select
+          [(ngModel)]="selectedCondition"
+          [ngModelOptions]="{ standalone: true }"
+          name="condition"
+        >
+          <mat-option
+            *ngFor="let condition of conditions"
+            [value]="condition.value"
+            >{{ condition.viewValue }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+</mat-card>

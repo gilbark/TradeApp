@@ -1,0 +1,49 @@
+mat-card {
+  margin: 20px auto;
+}
+mat-form-field {
+  width: 100%;
+}
+
+input[type="file"] {
+  visibility: hidden;
+  margin-bottom: 26px;
+}
+
+.image-preview {
+  height: fit-content;
+  margin: 1rem 1rem;
+  width: 100px;
+  text-align: center;
+  display: flex;
+  img {
+    justify-content: start;
+    flex-direction: row;
+    height: 100px;
+    margin: 0 10px;
+  }
+}
+
+.delete-image-text {
+  font-size: 10px;
+  color: rgb(212, 208, 208);
+  cursor: pointer;
+}
+
+.character-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 10px;
+  color: grey;
+}
+.save-changes {
+  display: flex;
+  align-items: center;
+  background-color: rgb(29, 202, 29);
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+  width: fit-content;
+  margin: -20px 0px 20px 0;
+}

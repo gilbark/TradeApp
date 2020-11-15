@@ -21,3 +21,17 @@ input {
     font-size: 15px;
   }
 }
+.add-new {
+  display: flex;
+  justify-content: flex-end;
+  margin: 15px 15px 0;
+}
+.add-new-button {
+  display: flex;
+  align-items: center;
+  background-color: rgb(29, 202, 29);
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+  width: fit-content;
+}

@@ -17,11 +17,7 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   viewingMyProducts = true;
   inOfferMode = false;
 
-  constructor(
-    private router: Router,
-    private registerDialog: MatDialog,
-    private productService: ProductsService
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     if (this.router.url === "/my-products") {
@@ -32,17 +28,4 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
-
-  openOfferModal() {
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.id = "register-modal-component";
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = "80%";
-    // dialogConfig.height = "wrap-content";
-    // this.inOfferMode = true;
-    // const registerModal = this.registerDialog.open(
-    //   OfferComponent,
-    //   dialogConfig
-    // );
-  }
 }

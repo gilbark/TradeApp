@@ -1,0 +1,33 @@
+.product-container {
+  display: flex;
+  height: auto;
+  padding: 10px;
+}
+
+.title-info {
+  padding: 40px;
+  display: flex;
+}
+.images {
+  width: 500px;
+  height: 400px;
+}
+.product-info-left {
+  flex: 2;
+  margin-left: 50px;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+.product-info-details {
+  margin-left: 20px;
+  width: 400px;
+}
+
+.product-info-right {
+  flex: 1;
+}
+
+.offer-section {
+  padding: 40px;
+}
