@@ -16,8 +16,12 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   userLoggedIn = true;
   viewingMyProducts = true;
   inOfferMode = false;
+  private productsSubscription: Subscription;
 
-  constructor(private router: Router) {}
+  constructor(
+    private productsService: ProductsService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     if (this.router.url === "/my-products") {

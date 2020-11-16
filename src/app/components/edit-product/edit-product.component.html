@@ -1,6 +1,6 @@
 <mat-card>
   <div class="edit-form">
-    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <form (submit)="onSubmit()" [formGroup]="form">
       <button mat-button class="save-changes" type="submit">
         <mat-icon style="margin-right: 5px">check</mat-icon> Save Changes
       </button>
@@ -13,7 +13,9 @@
           placeholder="Product Title"
           name="title"
           #titleInput
+          (keyup)="textInputChanged($event)"
         />
+        <span class="character-count">{{ titleTextCount }}</span>
         <mat-error *ngIf="titleInput.invalid">Please enter a title</mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -28,7 +30,7 @@
           #descriptionInput
           (keyup)="textInputChanged($event)"
         ></textarea>
-        <span class="character-count">{{ textCount }}</span>
+        <span class="character-count">{{ descriptionTextCount }}</span>
         <mat-error *ngIf="descriptionInput.invalid"
           >Please enter a valid description (at least 20 characters
           long)</mat-error
@@ -50,8 +52,18 @@
       </div>
       <div class="image-preview">
         <div *ngFor="let url of imageUrls; let i = index">
-          <img [src]="url" alt="" />
-          <p class="delete-image-text" (click)="removeImage(i)">Delete</p>
+          <img
+            [src]="url"
+            alt=""
+            *ngIf="url !== '' && url && form.get('images').valid"
+          />
+          <p
+            *ngIf="url !== '' && url && form.get('images').valid"
+            class="delete-image-text"
+            (click)="removeImage(i)"
+          >
+            Delete
+          </p>
         </div>
       </div>
 

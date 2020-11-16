@@ -37,7 +37,7 @@ export class ProductsService {
     },
   ];
 
-  public modalStatusSubject = new Subject<boolean>();
+  private productsChangedSubject = new Subject<Product[]>();
 
   constructor() {}
 
@@ -45,15 +45,25 @@ export class ProductsService {
     return [...this.products];
   }
 
-  getModalStatus() {
-    return this.modalStatusSubject.asObservable();
+  getProductsSubject() {
+    return this.productsChangedSubject.asObservable();
   }
 
-  modalStatusChanged(status: boolean) {
-    this.modalStatusSubject.next(status);
+  getLastId() {
+    return this.products.length;
   }
 
   getProduct(id: number) {
     return this.products[id - 1];
+  }
+
+  updateProduct(id: number, product: Product) {
+    this.products[id - 1] = product;
+    this.productsChangedSubject.next([...this.products]);
+  }
+
+  addProduct(product: Product) {
+    this.products.push(product);
+    this.productsChangedSubject.next([...this.products]);
   }
 }
