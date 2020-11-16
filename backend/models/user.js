@@ -34,7 +34,14 @@ const userSchema = mongoose.Schema({
     },
   },
   rating: {
-    type: Number,
+    value: {
+      type: Number,
+    },
+    arrOfRatings: [
+      {
+        type: Number,
+      },
+    ],
   },
   tradesCompleted: {
     type: Number,
