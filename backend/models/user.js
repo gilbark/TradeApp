@@ -46,13 +46,6 @@ const userSchema = mongoose.Schema({
   tradesCompleted: {
     type: Number,
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-      required: true,
-    },
-  ],
 });
 
 userSchema.plugin(uniqueValidator);

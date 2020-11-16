@@ -20,6 +20,13 @@ mat-card-actions {
     text-align: center;
     width: 80px;
   }
+  .delete {
+    background-color: rgb(207, 4, 4);
+    color: white;
+    border-radius: 25px;
+    text-align: center;
+    width: 80px;
+  }
 }
 
 .preview-container {
@@ -59,4 +66,3 @@ mat-expansion-panel-header {
   padding: 0 8px;
   width: 80px;
 }
-

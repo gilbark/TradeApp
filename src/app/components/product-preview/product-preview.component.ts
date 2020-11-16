@@ -25,6 +25,6 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
       this.viewingMyProducts = false;
     }
   }
-
+  deleteProduct() {}
   ngOnDestroy() {}
 }

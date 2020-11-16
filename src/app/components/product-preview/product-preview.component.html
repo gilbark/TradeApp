@@ -46,6 +46,14 @@
       >
         Edit
       </a>
+      <a
+        mat-button
+        class="delete"
+        *ngIf="userLoggedIn && viewingMyProducts"
+        (click)="deleteProduct()"
+      >
+        Delete
+      </a>
 
       <mat-accordion *ngIf="userLoggedIn && product.user !== 'Gilb1'">
         <mat-expansion-panel hideToggle="true">
