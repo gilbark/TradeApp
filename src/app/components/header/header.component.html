@@ -3,23 +3,31 @@
   <span class="spacer"></span>
   <ul>
     <li>
-      <a mat-button routerLink="/" routerLinkActive="active-link">Home</a>
+      <a
+        mat-button
+        [routerLink]="['/']"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active-link"
+        >Home</a
+      >
     </li>
     <li>
       <a
         mat-button
-        routerLink="/my-products"
+        [routerLink]="['/my-products']"
         routerLinkActive="active-link"
         *ngIf="userIsAuthenticated"
+        [routerLinkActiveOptions]="{ exact: true }"
         >My Products</a
       >
     </li>
     <li>
       <a
         mat-button
-        routerLink="/"
-        routerLinkActive="active-link"
+        [routerLink]="['/']"
+        routerLinkActive="active-link-notimplemented"
         *ngIf="userIsAuthenticated"
+        [routerLinkActiveOptions]="{ exact: true }"
         >My Profile</a
       >
     </li>
@@ -27,18 +35,20 @@
     <li>
       <a
         mat-button
-        routerLink="/"
-        routerLinkActive="active-link"
+        [routerLink]="['/']"
+        routerLinkActive="active-link-notimplemented"
         *ngIf="!userIsAuthenticated"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Log In</a
       >
     </li>
     <li>
       <a
         mat-button
-        routerLink="/"
-        routerLinkActive="active-link"
+        [routerLink]="['/']"
+        routerLinkActive="active-link-notimplemented"
         *ngIf="!userIsAuthenticated"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Sign Up</a
       >
     </li>
@@ -46,9 +56,10 @@
       <a
         class="signout"
         mat-button
-        routerLink="/"
-        routerLinkActive="active-link"
+        [routerLink]="['/']"
+        routerLinkActive="active-link-notimplemented"
         *ngIf="userIsAuthenticated"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Sign Out</a
       >
     </li>

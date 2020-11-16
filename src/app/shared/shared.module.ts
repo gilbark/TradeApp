@@ -10,6 +10,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
 import { MatBadgeModule } from "@angular/material/badge";
+import { MatChipsModule } from "@angular/material/chips";
+import { RatingModule } from "ng-starrating";
 
 const matModules: any[] = [
   MatCardModule,
@@ -21,11 +23,12 @@ const matModules: any[] = [
   MatSelectModule,
   MatInputModule,
   MatBadgeModule,
+  MatChipsModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, ...matModules],
-  exports: [IvyCarouselModule, ...matModules],
+  imports: [CommonModule, RatingModule, ...matModules],
+  exports: [IvyCarouselModule, RatingModule, ...matModules],
 })
-export class MaterialModule {}
+export class SharedModule {}

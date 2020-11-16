@@ -30,15 +30,9 @@ a {
 }
 
 .active-link {
-  color: black;
+  background-color: rgb(119 116 105 / 20%);
 }
 
 .signout {
   justify-content: flex-end;
-}
-
-.active-link:hover {
-  color: rgb(52, 94, 46);
-}
-.active-link {
 }

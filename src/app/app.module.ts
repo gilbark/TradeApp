@@ -7,7 +7,7 @@ import { ProductPreviewComponent } from "./components/product-preview/product-pr
 import { HomeComponent } from "./components/home/home.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { AppRoutingModule } from "./app-routing.module";
-import { MaterialModule } from "./shared/material.module";
+import { SharedModule } from "./shared/shared.module";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
@@ -31,7 +31,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    MaterialModule,
+    SharedModule,
     PipeModule.forRoot(),
   ],
   providers: [],

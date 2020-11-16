@@ -17,7 +17,16 @@
       <h4>{{ product.user }}</h4>
       <div class="user-rating">
         <p>User rating</p>
-        <p>{{ product.rating }}</p>
+        <div>
+          <star-rating
+            [value]="product.rating"
+            [totalstars]="5"
+            checkedcolor="gold"
+            uncheckedcolor="grey"
+            size="16px"
+            readonly="false"
+          ></star-rating>
+        </div>
       </div>
     </div>
   </div>

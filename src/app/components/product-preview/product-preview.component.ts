@@ -1,7 +1,6 @@
+import { StarRatingComponent } from "ng-starrating";
 import { ProductsService } from "./../../services/products.service";
-import { OfferComponent } from "./../offer/offer.component";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { Product } from "src/app/models/product.model";
 import { Subscription } from "rxjs";
@@ -16,12 +15,8 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   userLoggedIn = true;
   viewingMyProducts = true;
   inOfferMode = false;
-  private productsSubscription: Subscription;
 
-  constructor(
-    private productsService: ProductsService,
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     if (this.router.url === "/my-products") {

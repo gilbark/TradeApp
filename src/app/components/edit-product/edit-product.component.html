@@ -81,6 +81,27 @@
           >
         </mat-select>
       </mat-form-field>
+      <mat-form-field class="chips-tags-list">
+        <mat-chip-list #chipList aria-label="Tags">
+          <mat-chip
+            *ngFor="let tag of tags"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removeChip(tag)"
+          >
+            {{ tag }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="New tags..."
+            #tagsInput
+            name="tagsCtrl"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="seperatorKeysCodes"
+            (matChipInputTokenEnd)="addChip($event)"
+          />
+        </mat-chip-list>
+      </mat-form-field>
     </form>
   </div>
 </mat-card>
