@@ -1,3 +1,5 @@
+@media (min-width: 1024px) {
+}
 mat-card-content {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
@@ -49,20 +51,83 @@ mat-card-actions {
 }
 .preview-details {
   margin-left: 20px;
-  width: 400px;
+  width: auto;
 }
 
 .preview-right {
   flex: 1;
+  margin-left: 20px;
 }
 
-.hide-carousel {
-  display: none;
-}
 .mat-expansion-panel {
   box-shadow: 0 0 BLACK;
 }
 mat-expansion-panel-header {
   padding: 0 8px;
   width: 80px;
+}
+
+@media (max-width: 900px) {
+  .preview-right {
+    display: none;
+  }
+}
+
+@media (min-width: 300px) {
+  hr {
+    width: 90%;
+    margin-left: -3px;
+  }
+  mat-card {
+    margin: auto;
+  }
+  .preview-container {
+    justify-content: flex-end;
+  }
+  .preview-left {
+    flex-direction: column;
+  }
+  .preview-details {
+    margin-left: 0px;
+  }
+  .images {
+    margin-bottom: 20px;
+  }
+  mat-card-actions {
+    margin-left: 10px;
+  }
+}
+
+@media (min-width: 375px) {
+  mat-card {
+    margin-left: -5px;
+    width: 70%;
+  }
+  .images {
+    margin-left: -12px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 400) {
+  mat-card {
+    margin: auto;
+    width: 80%;
+  }
+}
+
+@media (min-width: 700px) {
+  mat-card {
+    width: 100%;
+  }
+  mat-card-actions {
+    padding: 15px;
+    margin-left: 355px;
+  }
+  .preview-left {
+    flex-direction: row;
+  }
+  .preview-details {
+    margin-left: 20px;
+  }
 }

@@ -1,4 +1,5 @@
 mat-toolbar {
+  width: 100%;
   background-color: #ffc65d;
 }
 
@@ -6,19 +7,6 @@ mat-button {
   color: black;
 }
 
-.spacer {
-  flex: 0;
-}
-
-ul {
-  flex: 2;
-  width: 100%;
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  justify-content: space-between;
-}
 a {
   text-decoration: none;
   cursor: pointer;
@@ -35,4 +23,29 @@ a {
 
 .signout {
   justify-content: flex-end;
+}
+
+@media (min-width: 300px) {
+  ul {
+    display: none;
+  }
+  .spacer {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .spacer {
+    flex: 0;
+  }
+
+  ul {
+    flex: 2;
+    width: 100%;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: space-between;
+  }
 }

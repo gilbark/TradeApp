@@ -13,8 +13,6 @@ export class ImageCarouselComponent implements OnInit, OnDestroy {
   constructor(private productService: ProductsService) {}
 
   ngOnInit() {
-    console.log(this.images);
-
     this.imageObjects = this.images.map((image) => {
       return { path: image };
     });

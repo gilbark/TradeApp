@@ -6,6 +6,7 @@ import { FormControl, FormGroup, NgForm, Validators } from "@angular/forms";
 import { Condition } from "src/app/models/condition.model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { Observable, Observer } from "rxjs";
 
 const fileTypes = ["png", "bmp", "jpg", "jpeg"];
 
@@ -24,12 +25,15 @@ export class EditProductComponent implements OnInit {
   imageUrls = [];
   selectedCondition: string;
   imagesForm: File[] = [];
+  imagesDataUrls: string[] | File[] = [];
   // Chip properties
   visible = true;
   selectable = true;
   removable = true;
   seperatorKeysCodes: number[] = [ENTER, COMMA];
   tags: string[] = [];
+  base64Image: any;
+
   @ViewChild("tagsInput") tagsInput: ElementRef<HTMLInputElement>;
 
   // Private properties
@@ -79,23 +83,47 @@ export class EditProductComponent implements OnInit {
       if (this.editMode) {
         this.productService.getProduct(this.id).subscribe((productData) => {
           this.product = {
-            id: productData._id,
-            title: productData.title,
-            description: productData.description,
-            tags: productData.tags,
-            condition: productData.condition,
-            images: productData.images,
-            owner: productData.owner,
+            id: productData.product._id,
+            title: productData.product.title,
+            description: productData.product.description,
+            tags: productData.product.tags,
+            condition: productData.product.condition,
+            images: productData.product.images,
+            owner: productData.product.owner,
+            rating: productData.product.owner.rating.value,
           };
+
+          this.selectedCondition = this.conditions[
+            this.conditions.findIndex(
+              (condition) => condition.viewValue === this.product.condition
+            )
+          ].value;
+
           this.form.setValue({
             title: this.product.title,
             description: this.product.description,
             tagsCtrl: this.product.tags,
-            images: [...this.product.images],
-            condition: this.conditions[this.product.condition],
+            images: this.product.images,
+            condition: this.selectedCondition,
           });
+
+          this.imageUrls = this.product.images;
+
           this.product.images.forEach((image) => {
             this.imageUrls.push(image.path);
+          });
+
+          // TEST GET IMAGE AS FILE
+          let imagesUrl = this.product.images as string[];
+          imagesUrl.forEach((imageUrl) => {
+            if (imageUrl !== undefined) {
+              this.getBase64ImageFromURL(imageUrl).subscribe((base64data) => {
+                // this is the image as dataUrl
+                this.base64Image = "data:image/jpg;base64," + base64data;
+
+                this.loadImages(base64data, imageUrl);
+              });
+            }
           });
         });
       } else {
@@ -116,6 +144,8 @@ export class EditProductComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.imagesForm);
+
     const productToSend: Product = {
       title: this.form.value["title"],
       description: this.form.value["description"],
@@ -129,10 +159,46 @@ export class EditProductComponent implements OnInit {
       owner: "Gilb1",
     };
     if (this.editMode) {
-      // this.productService.updateProduct(this.id, productToSend);
+      this.productService.updateProducts(
+        productToSend,
+        this.imagesForm,
+        this.id
+      );
     } else {
-      this.productService.addProduct(productToSend, this.imagesForm);
+      this.productService.updateProducts(productToSend, this.imagesForm);
     }
+  }
+
+  dataURItoBlob(dataURI, extension) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: "image/" + extension });
+    return blob;
+  }
+
+  loadImages(imagesDataUrl: any, url: string) {
+    const reader = new FileReader();
+    const imageBlob = this.dataURItoBlob(
+      imagesDataUrl,
+      url.split(".")[url.split(".").length - 1]
+    );
+
+    const imageFile = new File([imageBlob], url, {
+      type: "image/" + url.split(".")[2],
+    });
+    this.imagesForm.push(imageFile);
+    this.form.patchValue({ images: this.imagesForm });
+    this.form.get("images").updateValueAndValidity();
+
+    reader.onload = () => {
+      this.imageUrls.push(<string>reader.result);
+    };
+
+    reader.readAsDataURL(imageBlob);
   }
 
   onImagePicked(event: Event) {
@@ -162,6 +228,7 @@ export class EditProductComponent implements OnInit {
 
   removeImage(index: number) {
     this.imageUrls.splice(index, 1);
+    this.imagesForm.splice(index, 1);
   }
 
   textInputChanged(event: Event) {
@@ -197,5 +264,41 @@ export class EditProductComponent implements OnInit {
     if (index >= 0) {
       this.tags.splice(index, 1);
     }
+  }
+
+  getBase64Image(img: HTMLImageElement) {
+    // We create a HTML canvas object that will create a 2d image
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    // This will draw image
+    ctx.drawImage(img, 0, 0);
+    // Convert the drawn image to Data URL
+    const dataURL = canvas.toDataURL("image/png");
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  }
+
+  getBase64ImageFromURL(url: string) {
+    return new Observable((observer: Observer<string>) => {
+      // create an image object
+
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = url;
+      if (!img.complete) {
+        // This will call another method that will create image from url
+        img.onload = () => {
+          observer.next(this.getBase64Image(img));
+          observer.complete();
+        };
+        img.onerror = (err) => {
+          observer.error(err);
+        };
+      } else {
+        observer.next(this.getBase64Image(img));
+        observer.complete();
+      }
+    });
   }
 }

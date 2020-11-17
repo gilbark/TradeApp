@@ -1,3 +1,4 @@
+import { DeleteDialogComponent } from "./components/delete-dialog/delete-dialog.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
 import { PipeModule } from "./shared/pipe.module";
 import { ProductPageComponent } from "./components/product-page/product-page.component";
@@ -13,7 +14,7 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
     ProductPageComponent,
     ProductPreviewComponent,
     ImageCarouselComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     BrowserModule,

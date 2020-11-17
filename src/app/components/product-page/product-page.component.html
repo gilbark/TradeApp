@@ -3,32 +3,30 @@
     <div class="images">
       <app-image-carousel [images]="product.images"></app-image-carousel>
     </div>
-    <span>
+    <span class="details">
       <div class="product-info-details">
         <h1>{{ product.title }}</h1>
         <p>{{ product.description }}</p>
         <hr />
         <p>Condition: {{ product.condition }}</p>
       </div>
-    </span>
-  </div>
-  <div class="product-info-right">
-    <div class="user-details">
-      <h4>{{ product.owner }}</h4>
-      <div class="user-rating">
-        <p>User rating</p>
-        <div>
-          <star-rating
-            [value]="product.rating"
-            [totalstars]="5"
-            checkedcolor="gold"
-            uncheckedcolor="grey"
-            size="16px"
-            readonly="false"
-          ></star-rating>
+      <div class="user-details">
+        <h4>{{ product.owner }}</h4>
+        <div class="user-rating">
+          <p>User rating</p>
+          <div>
+            <star-rating
+              [value]="product.rating"
+              [totalstars]="5"
+              checkedcolor="gold"
+              uncheckedcolor="grey"
+              size="16px"
+              readonly="false"
+            ></star-rating>
+          </div>
         </div>
       </div>
-    </div>
+    </span>
   </div>
 </div>
 <hr />

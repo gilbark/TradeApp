@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = MIME_TYPE_MAP[file.mimetype];
     let error = null;
-
+    console.log(file.mimetype);
     if (file.size > 5000000) {
       error = new Error("File is too big");
       console.log("too big");

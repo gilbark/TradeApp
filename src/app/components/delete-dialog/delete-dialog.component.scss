@@ -1,0 +1,25 @@
+preview-container {
+  display: flex;
+  height: fit-content;
+  padding: 10px;
+}
+
+.images {
+  width: 300px;
+  height: 170px;
+}
+
+.preview-left {
+  flex: 2;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+.preview-details {
+  margin-left: 20px;
+  width: auto;
+}
+mat-card-content {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+}

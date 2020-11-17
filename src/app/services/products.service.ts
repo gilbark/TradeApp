@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
@@ -11,7 +12,7 @@ export class ProductsService {
   private productsChangedSubject = new Subject<Product[]>();
   private products: Product[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getProducts() {
     this.http
@@ -59,12 +60,7 @@ export class ProductsService {
     }>("http://localhost:3000/products/" + id);
   }
 
-  // updateProduct(id: number, product: Product) {
-  //   this.products[id - 1] = product;
-  //   this.productsChangedSubject.next([...this.products]);
-  // }
-
-  addProduct(product: Product, images: File[]) {
+  updateProducts(product: Product, images: File[], id?: string) {
     const productData = new FormData();
     productData.append("title", product.title);
     productData.append("description", product.description);
@@ -79,14 +75,35 @@ export class ProductsService {
     for (let i = 0; i < files.length; i++) {
       productData.append("images[]", images[i], images[i]["name"]);
     }
-
     productData.append("inTrade", "false");
-    this.http
-      .post("http://localhost:3000/products", productData)
-      .subscribe((responseData) => {
-        console.log(responseData);
-      });
 
-    this.productsChangedSubject.next([...this.products]);
+    if (id) {
+      this.http
+        .put("http://localhost:3000/products/" + id, productData)
+        .subscribe((responseData) => {
+          console.log(responseData);
+        });
+    } else {
+      this.http
+        .post("http://localhost:3000/products", productData)
+        .subscribe((responseData) => {
+          console.log(responseData);
+        });
+    }
+    this.getProducts();
+    this.router.navigate(["/my-products"]);
+  }
+
+  deleteProduct(id: string) {
+    this.http
+      .delete("http://localhost:3000/products/" + id)
+      .subscribe((res) => {
+        console.log(res);
+        this.products.splice(
+          this.products.findIndex((product) => product.id === id),
+          1
+        );
+        this.productsChangedSubject.next([...this.products]);
+      });
   }
 }

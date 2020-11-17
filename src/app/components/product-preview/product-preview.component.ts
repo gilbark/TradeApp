@@ -1,9 +1,16 @@
-import { StarRatingComponent } from "ng-starrating";
+import { DeleteDialogComponent } from "./../delete-dialog/delete-dialog.component";
 import { ProductsService } from "./../../services/products.service";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { Product } from "src/app/models/product.model";
-import { Subscription } from "rxjs";
+import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-product-preview",
@@ -12,11 +19,15 @@ import { Subscription } from "rxjs";
 })
 export class ProductPreviewComponent implements OnInit, OnDestroy {
   @Input() product: Product;
+  @Output() modalOpen: EventEmitter<boolean> = new EventEmitter<boolean>();
   userLoggedIn = true;
   viewingMyProducts = true;
-  inOfferMode = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private productService: ProductsService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     if (this.router.url === "/my-products") {
@@ -25,6 +36,18 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
       this.viewingMyProducts = false;
     }
   }
-  deleteProduct() {}
+  deleteProduct() {
+    this.modalOpen.emit(true);
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: this.product,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.modalOpen.emit(false);
+      if (result === "") {
+        this.productService.deleteProduct(this.product.id);
+      }
+      console.log(result);
+    });
+  }
   ngOnDestroy() {}
 }

@@ -9,7 +9,15 @@
     <mat-icon>add</mat-icon>Add Product
   </button>
 </div>
-<app-product-preview
-  *ngFor="let product of products"
-  [product]="product"
-></app-product-preview>
+<div [ngClass]="modalOpen ? 'hide-preview' : ''">
+  <app-product-preview
+    (modalOpen)="changeModalStatus($event)"
+    *ngFor="let product of products"
+    [product]="product"
+  ></app-product-preview>
+  <mat-card *ngIf="products.length === 0">
+    <mat-card-content>
+      <p>No products found</p>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -12,6 +12,7 @@ import { Subscription } from "rxjs";
 export class HomeComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   inMyProducts = false;
+  modalOpen = false;
   private productsSubscription: Subscription;
 
   constructor(
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.productService.getProducts();
-    
+
     this.productsSubscription = this.productService
       .getProductsSubject()
       .subscribe((products) => {
@@ -43,5 +44,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.products = products;
       this.inMyProducts = false;
     }
+  }
+  changeModalStatus(modalStatus: any) {
+    this.modalOpen = modalStatus;
   }
 }

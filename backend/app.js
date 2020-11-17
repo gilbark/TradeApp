@@ -73,6 +73,36 @@ app.post("/products", fileExtension, (req, res, next) => {
     });
 });
 
+// PUT: Update a product
+app.put("/products/:id", fileExtension, (req, res, next) => {
+  const serverUrl = req.protocol + "://" + req.get("host");
+  const product = {
+    title: req.body.title,
+    description: req.body.description,
+    images: req.files.map((file) => {
+      return serverUrl + "/images/" + file.filename;
+    }),
+    condition: req.body.condition,
+    tags: req.body.tags,
+    inTrade: req.body.inTrade,
+  };
+  console.log(product.images);
+  Product.updateOne({ _id: req.params.id }, product)
+    .then((result) => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Update successful" });
+      } else {
+        res.status(401).json({ message: "Not authorized" });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Couldnt update post",
+      });
+    });
+});
+
 // GET: Get all products
 app.get("/products", (req, res, next) => {
   Product.find()
