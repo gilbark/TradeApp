@@ -1,3 +1,4 @@
+import { RegisterComponent } from "./components/register/register.component";
 import { DeleteDialogComponent } from "./components/delete-dialog/delete-dialog.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
 import { PipeModule } from "./shared/pipe.module";
@@ -26,6 +27,7 @@ import { HttpClientModule } from "@angular/common/http";
     ProductPageComponent,
     ProductPreviewComponent,
     ImageCarouselComponent,
+    RegisterComponent,
     DeleteDialogComponent,
   ],
   imports: [

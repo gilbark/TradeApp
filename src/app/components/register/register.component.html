@@ -1,0 +1,98 @@
+<mat-card>
+  <form (submit)="onSignup(signupForm)" #signupForm="ngForm">
+    <div class="user-info">
+      <mat-form-field>
+        <input
+          matInput
+          type="email"
+          name="email"
+          ngModel
+          required
+          email
+          placeholder="E-Mail"
+          #emailInput="ngModel"
+        />
+        <mat-error *ngIf="!emailInput.valid">
+          Please enter a valid Email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          name="username"
+          ngModel
+          required
+          placeholder="Username"
+          #usernameInput="ngModel"
+        />
+        <mat-error *ngIf="!usernameInput.valid">
+          Please enter a valid username
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          type="password"
+          name="password"
+          ngModel
+          required
+          placeholder="Password"
+          #passwordInput="ngModel"
+        />
+        <mat-error *ngIf="!passwordInput.valid">
+          Please enter a valid password
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="address-info">
+      <h3>Address</h3>
+      <div class="user-address">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            name="country"
+            ngModel
+            required
+            placeholder="Country"
+            #countryInput="ngModel"
+          />
+          <mat-error *ngIf="!countryInput.valid">
+            Please enter a valid country
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            name="city"
+            ngModel
+            required
+            placeholder="City"
+            #cityInput="ngModel"
+          />
+          <mat-error *ngIf="!cityInput.valid">
+            Please enter a valid city
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            name="address"
+            ngModel
+            required
+            placeholder="Address"
+            #addressInput="ngModel"
+          />
+          <mat-error *ngIf="!addressInput.valid">
+            Please enter a valid address
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <button mat-button type="submit">Create</button>
+  </form>
+</mat-card>

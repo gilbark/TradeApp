@@ -4,6 +4,9 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Product } from "../models/product.model";
+import { environment } from "src/environments/environment";
+
+const BACKEND_URL = environment.apiUrl + "/products/";
 
 @Injectable({
   providedIn: "root",
@@ -16,7 +19,7 @@ export class ProductsService {
 
   getProducts() {
     this.http
-      .get<{ products: any }>("http://localhost:3000/products/")
+      .get<{ products: any }>(BACKEND_URL)
       .pipe(
         map((productData) => {
           return {
@@ -57,7 +60,7 @@ export class ProductsService {
         owner: any;
         rating: any;
       };
-    }>("http://localhost:3000/products/" + id);
+    }>(BACKEND_URL + id);
   }
 
   updateProducts(product: Product, images: File[], id?: string) {
@@ -78,32 +81,27 @@ export class ProductsService {
     productData.append("inTrade", "false");
 
     if (id) {
-      this.http
-        .put("http://localhost:3000/products/" + id, productData)
-        .subscribe((responseData) => {
-          console.log(responseData);
-        });
+      this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {
+        console.log(responseData);
+      });
     } else {
-      this.http
-        .post("http://localhost:3000/products", productData)
-        .subscribe((responseData) => {
-          console.log(responseData);
-        });
+      this.http.post(BACKEND_URL, productData).subscribe((responseData) => {
+        console.log(responseData);
+      });
     }
     this.getProducts();
+    this.productsChangedSubject.next([...this.products]);
     this.router.navigate(["/my-products"]);
   }
 
   deleteProduct(id: string) {
-    this.http
-      .delete("http://localhost:3000/products/" + id)
-      .subscribe((res) => {
-        console.log(res);
-        this.products.splice(
-          this.products.findIndex((product) => product.id === id),
-          1
-        );
-        this.productsChangedSubject.next([...this.products]);
-      });
+    this.http.delete(BACKEND_URL + id).subscribe((res) => {
+      console.log(res);
+      this.products.splice(
+        this.products.findIndex((product) => product.id === id),
+        1
+      );
+      this.productsChangedSubject.next([...this.products]);
+    });
   }
 }

@@ -98,7 +98,7 @@ mat-expansion-panel-header {
   }
 }
 
-@media (min-width: 375px) {
+@media (max-width: 375px) {
   mat-card {
     margin-left: -5px;
     width: 70%;

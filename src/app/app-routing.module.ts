@@ -1,3 +1,4 @@
+import { RegisterComponent } from "./components/register/register.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
 import { ProductPageComponent } from "./components/product-page/product-page.component";
 import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: "view/:id", component: ProductPageComponent },
   { path: "view/:id/edit", component: EditProductComponent },
   { path: "new", component: EditProductComponent },
+  { path: "register", component: RegisterComponent },
 ];
 
 @NgModule({
