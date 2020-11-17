@@ -1,0 +1,29 @@
+<mat-card>
+  <form (submit)="loginUser(loginForm)" #loginForm="ngForm">
+    <mat-form-field>
+      <input
+        type="email"
+        name="email"
+        email
+        required
+        matInput
+        placeholder="E-Mail"
+        ngModel
+        #emailInput="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        type="password"
+        name="password"
+        required
+        matInput
+        placeholder="Password"
+        ngModel
+        #passwordInput="ngModel"
+      />
+    </mat-form-field>
+    <mat-error *ngIf="loginFailed">Email and password don't match</mat-error>
+    <button mat-button class="login-button" type="submit">Login</button>
+  </form>
+</mat-card>

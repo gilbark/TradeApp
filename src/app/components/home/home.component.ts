@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Product } from "src/app/models/product.model";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-home",
@@ -13,14 +14,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   inMyProducts = false;
   modalOpen = false;
+  userIsAuthenticated = false;
+  userId: string;
   private productsSubscription: Subscription;
+  private authStatusSubscription: Subscription;
 
   constructor(
     private productService: ProductsService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.authStatusSubscription = this.authService
+      .getAuthStatusListener()
+      .subscribe((isAuthenticated) => {
+        this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserID();
+      });
+
     this.productService.getProducts();
 
     this.productsSubscription = this.productService
@@ -34,11 +46,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.productsSubscription.unsubscribe();
+    this.authStatusSubscription.unsubscribe();
   }
 
   checkAndFilter(products: Product[]) {
     if (this.router.url === "/my-products") {
-      this.products = products.filter((product) => product.owner === "Gilb1");
+      this.products = products.filter(
+        (product) => product.owner.id === this.userId
+      );
       this.inMyProducts = true;
     } else {
       this.products = products;

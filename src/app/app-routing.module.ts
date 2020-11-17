@@ -1,3 +1,4 @@
+import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
 import { ProductPageComponent } from "./components/product-page/product-page.component";
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: "view/:id/edit", component: EditProductComponent },
   { path: "new", component: EditProductComponent },
   { path: "register", component: RegisterComponent },
+  { path: "login", component: LoginComponent },
 ];
 
 @NgModule({

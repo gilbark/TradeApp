@@ -55,13 +55,13 @@
         Delete
       </a>
 
-      <mat-accordion *ngIf="userLoggedIn && product.owner !== 'Gilb1'">
+      <mat-accordion *ngIf="userLoggedIn ">
         <mat-expansion-panel hideToggle="true">
           <mat-expansion-panel-header>
             <button
               mat-button
               class="offer"
-              *ngIf="userLoggedIn && product.owner !== 'Gilb1'"
+              *ngIf="userLoggedIn && product.owner.id !== userId"
             >
               Offer
             </button></mat-expansion-panel-header

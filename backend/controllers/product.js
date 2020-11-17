@@ -60,7 +60,24 @@ exports.getProducts = (req, res, next) => {
       if (!products) {
         return res.status(500).json({ message: "Unable to retrieve products" });
       }
-      res.status(200).json({ products });
+      const transformedProducts = products.map((product) => {
+        return {
+          condition: product.condition,
+          description: product.description,
+          images: product.images,
+          inTrade: product.inTrade,
+          tags: product.tags,
+          title: product.title,
+          _id: product._id,
+          owner: {
+            username: product.owner.username,
+            _id: product.owner._id,
+            rating: product.owner.rating.value,
+          },
+        };
+      });
+      console.log(transformedProducts);
+      res.status(200).json({ transformedProducts });
     });
 };
 

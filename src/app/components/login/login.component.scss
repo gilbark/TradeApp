@@ -1,0 +1,21 @@
+mat-card {
+  width: 70%;
+  margin: 30px auto;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.login-button {
+  background-color: rgb(4, 160, 207);
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+  width: 80px;
+  margin: auto;
+}
+mat-form-field {
+  margin: auto;
+  width: 70%;
+}

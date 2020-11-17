@@ -19,11 +19,15 @@ export class ProductsService {
 
   getProducts() {
     this.http
-      .get<{ products: any }>(BACKEND_URL)
+      .get<{ transformedProducts: any }>(BACKEND_URL)
       .pipe(
         map((productData) => {
+          console.log(productData);
+
           return {
-            products: productData.products.map((product) => {
+            products: productData.transformedProducts.map((product) => {
+              console.log(product);
+
               return {
                 title: product.title,
                 description: product.description,
@@ -73,12 +77,13 @@ export class ProductsService {
       });
     }
     productData.append("condition", product.condition);
-    productData.append("ownerId", "5fb2813e0453e727887444ea");
+    productData.append("ownerId", product.owner.id);
     const files: Array<File> = images;
     for (let i = 0; i < files.length; i++) {
       productData.append("images[]", images[i], images[i]["name"]);
     }
     productData.append("inTrade", "false");
+    console.log(product.owner);
 
     if (id) {
       this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {

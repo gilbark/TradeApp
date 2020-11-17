@@ -88,4 +88,54 @@ app.get("/api/users", async (req, res) => {
     });
 });
 
+app.delete("/api/users", (req, res, next) => {
+  User.deleteMany()
+    .then((response) => {
+      res.status(200).json({ message: "Users deleted" });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Cant delete users" });
+    });
+});
+
+app.post("/api/users/login", (req, res, next) => {
+  let fetchedUser;
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "Authentication failed" });
+      }
+      fetchedUser = user;
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    .then((result) => {
+      if (!result) {
+        return res.status(401).json({
+          message: "Invalid authentication credentials",
+        });
+      }
+      const token = jwt.sign(
+        {
+          email: fetchedUser.email,
+          userId: fetchedUser._id,
+        },
+        process.env.JWT_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+      res.status(200).json({
+        message: "Logged in successfuly",
+        token,
+        expiresIn: 3600,
+        userId: fetchedUser._id,
+      });
+    })
+    .catch((err) => {
+      return res.status(401).json({
+        message: "Invalid authentication credentials",
+      });
+    });
+});
+
 module.exports = app;

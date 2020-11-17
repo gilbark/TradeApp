@@ -1,3 +1,4 @@
+import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { DeleteDialogComponent } from "./components/delete-dialog/delete-dialog.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
@@ -28,6 +29,7 @@ import { HttpClientModule } from "@angular/common/http";
     ProductPreviewComponent,
     ImageCarouselComponent,
     RegisterComponent,
+    LoginComponent,
     DeleteDialogComponent,
   ],
   imports: [

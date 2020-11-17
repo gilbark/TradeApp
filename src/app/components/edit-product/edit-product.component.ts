@@ -1,12 +1,19 @@
 import { Product } from "src/app/models/product.model";
 import { ProductsService } from "./../../services/products.service";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { FormControl, FormGroup, NgForm, Validators } from "@angular/forms";
 import { Condition } from "src/app/models/condition.model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { Observable, Observer } from "rxjs";
+import { Observable, Observer, Subscription } from "rxjs";
+import { AuthService } from "src/app/services/auth.service";
 
 const fileTypes = ["png", "bmp", "jpg", "jpeg"];
 
@@ -15,7 +22,7 @@ const fileTypes = ["png", "bmp", "jpg", "jpeg"];
   templateUrl: "./edit-product.component.html",
   styleUrls: ["./edit-product.component.scss"],
 })
-export class EditProductComponent implements OnInit {
+export class EditProductComponent implements OnInit, OnDestroy {
   // General properties
   product: Product;
   editMode: boolean;
@@ -33,11 +40,13 @@ export class EditProductComponent implements OnInit {
   seperatorKeysCodes: number[] = [ENTER, COMMA];
   tags: string[] = [];
   base64Image: any;
+  private authStatusSub: Subscription;
 
   @ViewChild("tagsInput") tagsInput: ElementRef<HTMLInputElement>;
 
   // Private properties
   private id: string;
+  private userId: string;
 
   conditions: Condition[] = [
     { value: "used", viewValue: "Used" },
@@ -52,10 +61,15 @@ export class EditProductComponent implements OnInit {
 
   constructor(
     private productService: ProductsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {});
+    this.userId = this.authService.getUserID();
     let title = "";
     let imagePaths = [];
     let description = "";
@@ -156,7 +170,9 @@ export class EditProductComponent implements OnInit {
       tags: this.tags,
       id: this.id,
       rating: 4,
-      owner: "Gilb1",
+      owner: {
+        id: this.userId,
+      },
     };
     if (this.editMode) {
       this.productService.updateProducts(
@@ -304,4 +320,6 @@ export class EditProductComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy() {}
 }
