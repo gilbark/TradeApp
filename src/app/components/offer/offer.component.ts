@@ -18,15 +18,13 @@ export class OfferComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.products = this.productService
-      .getProducts()
-      .filter((product) => product.user === "Gilb1");
+    // this.productService.getProducts();
 
     this.productsSubject = this.productService
       .getProductsSubject()
       .subscribe((products: Product[]) => {
         return (this.products = products.filter(
-          (product) => product.user === "Gilb1"
+          (product) => product.owner === "Gilb1"
         ));
       });
   }

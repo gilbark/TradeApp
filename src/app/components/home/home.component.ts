@@ -20,12 +20,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.productService.getProducts();
+    
     this.productsSubscription = this.productService
       .getProductsSubject()
       .subscribe((products) => {
         this.products = products;
       });
-    this.products = this.productService.getProducts();
 
     this.checkAndFilter(this.products);
   }
@@ -36,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   checkAndFilter(products: Product[]) {
     if (this.router.url === "/my-products") {
-      this.products = products.filter((product) => product.user === "Gilb1");
+      this.products = products.filter((product) => product.owner === "Gilb1");
       this.inMyProducts = true;
     } else {
       this.products = products;

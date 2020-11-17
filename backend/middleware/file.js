@@ -5,20 +5,22 @@ const MIME_TYPE_MAP = {
   "image/jpeg": "jpg",
   "image/jpg": "jpg",
 };
-
-const upload = multer({
-  dest: 'images'
-});
-
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = MIME_TYPE_MAP[file.mimetype];
-    let error = new Error("Invalid mime type");
-    if (isValid) {
-      error = null;
+    let error = null;
+
+    if (file.size > 5000000) {
+      error = new Error("File is too big");
+      console.log("too big");
     }
-    cb(null, "backend/images");
+
+    if (!isValid) {
+      error = new Error("Invalid mime type");
+      console.log("wrong type");
+    }
+    console.log("error is" + error);
+    cb(error, "backend/images");
   },
   filename: (req, file, cb) => {
     const name = file.originalname.toLocaleLowerCase().split(" ").join("-");
@@ -26,5 +28,4 @@ const storage = multer.diskStorage({
     cb(null, name + "-" + Date.now() + "." + ext);
   },
 });
-
-module.exports = multer({ storage: storage }).single("images");
+module.exports = multer({ storage: storage }).array("images[]", 5);

@@ -1,10 +1,10 @@
 export interface Product {
-  id: number;
+  id: string;
   title: string;
   description: string;
   condition: string;
-  images: { path: string }[];
+  images: string[] | File[];
   tags?: string[];
-  user: string;
-  rating: number;
+  owner: string;
+  rating?: number; // TODO: Remove when getting user by authentication
 }

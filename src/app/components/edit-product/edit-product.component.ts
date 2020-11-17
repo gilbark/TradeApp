@@ -23,17 +23,17 @@ export class EditProductComponent implements OnInit {
   titleTextCount = 0;
   imageUrls = [];
   selectedCondition: string;
-
+  imagesForm: File[] = [];
   // Chip properties
   visible = true;
   selectable = true;
   removable = true;
   seperatorKeysCodes: number[] = [ENTER, COMMA];
-  tags: string[] = null;
+  tags: string[] = [];
   @ViewChild("tagsInput") tagsInput: ElementRef<HTMLInputElement>;
 
   // Private properties
-  private id: number;
+  private id: string;
 
   conditions: Condition[] = [
     { value: "used", viewValue: "Used" },
@@ -52,16 +52,6 @@ export class EditProductComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params: Params) => {
-      this.id = +params["id"];
-      this.editMode = this.id ? true : false;
-      this.initForm();
-      this.descriptionTextCount = this.form.value["description"].length;
-      this.titleTextCount = this.form.value["title"].length;
-    });
-  }
-
-  initForm() {
     let title = "";
     let imagePaths = [];
     let description = "";
@@ -83,55 +73,65 @@ export class EditProductComponent implements OnInit {
       tagsCtrl: new FormControl(null),
     });
 
-    if (this.editMode) {
-      this.product = this.productService.getProduct(this.id);
-      this.imageUrls = this.product.images.map((i) => i.path);
-      this.selectedCondition = this.conditions.find((con) => {
-        return con.viewValue === this.product.condition;
-      }).value;
-      this.tags = this.product.tags;
+    this.route.params.subscribe((params: Params) => {
+      this.id = params["id"];
+      this.editMode = this.id ? true : false;
+      if (this.editMode) {
+        this.productService.getProduct(this.id).subscribe((productData) => {
+          this.product = {
+            id: productData._id,
+            title: productData.title,
+            description: productData.description,
+            tags: productData.tags,
+            condition: productData.condition,
+            images: productData.images,
+            owner: productData.owner,
+          };
+          this.form.setValue({
+            title: this.product.title,
+            description: this.product.description,
+            tagsCtrl: this.product.tags,
+            images: [...this.product.images],
+            condition: this.conditions[this.product.condition],
+          });
+          this.product.images.forEach((image) => {
+            this.imageUrls.push(image.path);
+          });
+        });
+      } else {
+        this.editMode = false;
+        this.id = null;
+        this.form.setValue({
+          title,
+          description,
+          images: imagePaths,
+          condition: this.conditions[0],
+          tagsCtrl: this.tags,
+        });
+      }
 
-      this.form.setValue({
-        title: this.product.title,
-        description: this.product.description,
-        images: this.imageUrls,
-        condition: this.selectedCondition
-          ? this.selectedCondition
-          : this.conditions[0], // To change this when this.conditions can be set
-        tagsCtrl: this.tags,
-      });
-    } else {
-      this.form.setValue({
-        title,
-        description,
-        images: imagePaths,
-        condition: this.conditions[0],
-        tagsCtrl: this.tags,
-      });
-
-      this.id = this.productService.getLastId() + 1;
-    }
+      this.descriptionTextCount = this.form.value["description"].length;
+      this.titleTextCount = this.form.value["title"].length;
+    });
   }
 
   onSubmit() {
     const productToSend: Product = {
       title: this.form.value["title"],
       description: this.form.value["description"],
-      images: this.form.value["images"].map((image) => {
-        return { path: image };
-      }),
+      images: this.form.value.images,
       condition: this.conditions.filter(
         (con) => con.value === this.selectedCondition
       )[0].viewValue,
       tags: this.tags,
       id: this.id,
       rating: 4,
-      user: "Gilb1",
+      owner: "Gilb1",
     };
     if (this.editMode) {
-      this.productService.updateProduct(this.id, productToSend);
+      // this.productService.updateProduct(this.id, productToSend);
     } else {
-      this.productService.addProduct(productToSend);
+      this.productService.addProduct(productToSend, this.imagesForm);
     }
   }
 
@@ -144,8 +144,10 @@ export class EditProductComponent implements OnInit {
         const extension = files[i].name
           .split(".")
           [files[i].name.split(".").length - 1].toLowerCase();
+
         if (fileTypes.some((type) => type === extension)) {
-          this.form.patchValue({ images: this.imageUrls });
+          this.imagesForm.push(files[i]);
+          this.form.patchValue({ images: this.imagesForm });
           this.form.get("images").updateValueAndValidity();
 
           reader.onload = () => {

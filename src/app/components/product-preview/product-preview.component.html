@@ -16,7 +16,7 @@
       </div>
       <div class="preview-right">
         <div class="user-details">
-          <h4>{{ product.user }}</h4>
+          <h4>{{ product.owner }}</h4>
           <div class="user-rating">
             <p>User rating</p>
             <div>
@@ -55,13 +55,13 @@
         Delete
       </a>
 
-      <mat-accordion *ngIf="userLoggedIn && product.user !== 'Gilb1'">
+      <mat-accordion *ngIf="userLoggedIn && product.owner !== 'Gilb1'">
         <mat-expansion-panel hideToggle="true">
           <mat-expansion-panel-header>
             <button
               mat-button
               class="offer"
-              *ngIf="userLoggedIn && product.user !== 'Gilb1'"
+              *ngIf="userLoggedIn && product.owner !== 'Gilb1'"
             >
               Offer
             </button></mat-expansion-panel-header

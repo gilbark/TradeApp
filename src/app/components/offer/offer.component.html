@@ -3,7 +3,7 @@
     <mat-expansion-panel *ngFor="let product of products">
       <mat-expansion-panel-header
         ><div class="offer-product-expansion-header">
-          <img class="image-thumbnail" [src]="product.images[0].path" />
+          <img class="image-thumbnail" [src]="product.images[0]" />
           <strong> {{ product.title }}</strong>
         </div>
       </mat-expansion-panel-header>
