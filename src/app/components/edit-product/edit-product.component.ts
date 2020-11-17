@@ -188,15 +188,11 @@ export class EditProductComponent implements OnInit {
     );
 
     const imageFile = new File([imageBlob], url, {
-      type: "image/" + url.split(".")[2],
+      type: "image/" + url.split(".")[url.split(".").length - 1],
     });
     this.imagesForm.push(imageFile);
     this.form.patchValue({ images: this.imagesForm });
     this.form.get("images").updateValueAndValidity();
-
-    reader.onload = () => {
-      this.imageUrls.push(<string>reader.result);
-    };
 
     reader.readAsDataURL(imageBlob);
   }
@@ -228,6 +224,13 @@ export class EditProductComponent implements OnInit {
 
   removeImage(index: number) {
     this.imageUrls.splice(index, 1);
+    console.log(
+      "index is " +
+        index +
+        "   imageForms item in this index is " +
+        this.imagesForm[index].name
+    );
+
     this.imagesForm.splice(index, 1);
   }
 
