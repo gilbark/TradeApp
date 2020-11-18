@@ -14,8 +14,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
+    // User auth status determines tab visibility
     this.userIsAuthenticated = this.authService.getIsAuth();
-    console.log(this.userIsAuthenticated);
     this.authListenerSubs = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {

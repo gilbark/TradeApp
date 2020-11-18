@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Product } from "src/app/models/product.model";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "src/app/services/auth.service";
 import { Subscription } from "rxjs";
 
@@ -21,6 +21,7 @@ import { Subscription } from "rxjs";
 })
 export class ProductPreviewComponent implements OnInit, OnDestroy {
   @Input() product: Product;
+  // Used to check if user is in Delete Modal in order to change DOM elements
   @Output() modalOpen: EventEmitter<boolean> = new EventEmitter<boolean>();
   userLoggedIn = true;
   viewingMyProducts = true;
@@ -38,16 +39,20 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
+        // Check user auth status
         this.userLoggedIn = isAuthenticated;
         this.userId = this.authService.getUserID();
       });
 
+    // If in my-products, filter by user's own products (currently filtered on frontend)
     if (this.router.url === "/my-products") {
       this.viewingMyProducts = true;
     } else {
       this.viewingMyProducts = false;
     }
   }
+
+  // If delete button clicked, open the Delete modal
   deleteProduct() {
     this.modalOpen.emit(true);
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -58,8 +63,10 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
       if (result === "") {
         this.productService.deleteProduct(this.product.id);
       }
-      console.log(result);
     });
   }
-  ngOnDestroy() {}
+
+  ngOnDestroy() {
+    this.authStatusSubscription.unsubscribe();
+  }
 }

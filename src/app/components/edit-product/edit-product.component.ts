@@ -29,20 +29,20 @@ export class EditProductComponent implements OnInit, OnDestroy {
   form: FormGroup;
   descriptionTextCount = 0;
   titleTextCount = 0;
-  imageUrls = [];
   selectedCondition: string;
-  imagesForm: File[] = [];
-  imagesDataUrls: string[] | File[] = [];
+
   // Chip properties
   visible = true;
   selectable = true;
   removable = true;
   seperatorKeysCodes: number[] = [ENTER, COMMA];
   tags: string[] = [];
-  base64Image: any;
-  private authStatusSub: Subscription;
-
   @ViewChild("tagsInput") tagsInput: ElementRef<HTMLInputElement>;
+
+  base64Image: any; // Base64 for images
+  imageUrls = []; // Local images array
+  imagesForm: File[] = []; // Images as File array
+  private authStatusSub: Subscription;
 
   // Private properties
   private id: string;
@@ -70,11 +70,13 @@ export class EditProductComponent implements OnInit, OnDestroy {
       .getAuthStatusListener()
       .subscribe((authStatus) => {});
     this.userId = this.authService.getUserID();
+    // Initialize empty parameters for empty new product
     let title = "";
     let imagePaths = [];
     let description = "";
     this.selectedCondition = this.conditions[0].value;
 
+    // Initialize form
     this.form = new FormGroup({
       title: new FormControl(title, {
         validators: [Validators.required, Validators.minLength(3)],
@@ -91,10 +93,12 @@ export class EditProductComponent implements OnInit, OnDestroy {
       tagsCtrl: new FormControl(null),
     });
 
+    // Get product ID from url query params
     this.route.params.subscribe((params: Params) => {
       this.id = params["id"];
       this.editMode = this.id ? true : false;
       if (this.editMode) {
+        // If is in editmode (there's an ID) map response to object that frontend understands
         this.productService.getProduct(this.id).subscribe((productData) => {
           this.product = {
             id: productData.product._id,
@@ -107,12 +111,14 @@ export class EditProductComponent implements OnInit, OnDestroy {
             rating: productData.product.owner.rating.value,
           };
 
+          // Set the condition (Used/New etc...)
           this.selectedCondition = this.conditions[
             this.conditions.findIndex(
               (condition) => condition.viewValue === this.product.condition
             )
           ].value;
 
+          // Set received data to form
           this.form.setValue({
             title: this.product.title,
             description: this.product.description,
@@ -127,14 +133,16 @@ export class EditProductComponent implements OnInit, OnDestroy {
             this.imageUrls.push(image.path);
           });
 
-          // TEST GET IMAGE AS FILE
-          let imagesUrl = this.product.images as string[];
-          imagesUrl.forEach((imageUrl) => {
+          // Images upload handling
+          // Get image from product
+          const imagesUrls = this.product.images as string[];
+          imagesUrls.forEach((imageUrl) => {
             if (imageUrl !== undefined) {
+              // Get image as base 64
               this.getBase64ImageFromURL(imageUrl).subscribe((base64data) => {
-                // this is the image as dataUrl
+                // This is the image as dataUrl (**might not use**)
                 this.base64Image = "data:image/jpg;base64," + base64data;
-
+                // Function that turns base64 to blob
                 this.loadImages(base64data, imageUrl);
               });
             }
@@ -143,6 +151,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
       } else {
         this.editMode = false;
         this.id = null;
+        // If not in edit mode set an empty form
         this.form.setValue({
           title,
           description,
@@ -152,14 +161,14 @@ export class EditProductComponent implements OnInit, OnDestroy {
         });
       }
 
+      // Set the text input counters (title / description) if there are any
       this.descriptionTextCount = this.form.value["description"].length;
       this.titleTextCount = this.form.value["title"].length;
     });
   }
 
   onSubmit() {
-    console.log(this.imagesForm);
-
+    // Create Product object that service gets
     const productToSend: Product = {
       title: this.form.value["title"],
       description: this.form.value["description"],
@@ -185,6 +194,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Transforms datauri to blobs
   dataURItoBlob(dataURI, extension) {
     const byteString = window.atob(dataURI);
     const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -196,16 +206,19 @@ export class EditProductComponent implements OnInit, OnDestroy {
     return blob;
   }
 
+  // Load the images to form
   loadImages(imagesDataUrl: any, url: string) {
     const reader = new FileReader();
+    // Turns dataURI to Blob
     const imageBlob = this.dataURItoBlob(
       imagesDataUrl,
       url.split(".")[url.split(".").length - 1]
     );
-
+    // Transform Blob result to File
     const imageFile = new File([imageBlob], url, {
       type: "image/" + url.split(".")[url.split(".").length - 1],
     });
+    // Handle form
     this.imagesForm.push(imageFile);
     this.form.patchValue({ images: this.imagesForm });
     this.form.get("images").updateValueAndValidity();
@@ -213,18 +226,24 @@ export class EditProductComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(imageBlob);
   }
 
+  // Executes when user selected image(s)
   onImagePicked(event: Event) {
+    // Get the files from input element
     const files = (event.target as HTMLInputElement).files;
+    // Check if there are files
     if (files && files[0]) {
+      // Iterate through all files
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
 
+        // Check that the extension is correct, if not, will not load
         const extension = files[i].name
           .split(".")
           [files[i].name.split(".").length - 1].toLowerCase();
-
         if (fileTypes.some((type) => type === extension)) {
+          // imagesForm is the images in File[] format
           this.imagesForm.push(files[i]);
+          // Update form and validate
           this.form.patchValue({ images: this.imagesForm });
           this.form.get("images").updateValueAndValidity();
 
@@ -238,18 +257,14 @@ export class EditProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Remove image locally (eventually the API will take care of removing it from Product object references)
   removeImage(index: number) {
     this.imageUrls.splice(index, 1);
-    console.log(
-      "index is " +
-        index +
-        "   imageForms item in this index is " +
-        this.imagesForm[index].name
-    );
 
     this.imagesForm.splice(index, 1);
   }
 
+  // Update character counter for title and description text inputs
   textInputChanged(event: Event) {
     const value = (event.target as HTMLInputElement).value;
 
@@ -260,6 +275,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Add chips (search tags) from search bar
   addChip(event: MatChipInputEvent) {
     const input = event.input;
     const value = event.value;
@@ -277,6 +293,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
     this.form.setControl("tagsCtrl", new FormControl(null));
   }
 
+  // Remove chips (search tags) from search bar
   removeChip(tag: string) {
     const index = this.tags.indexOf(tag);
 
@@ -291,20 +308,24 @@ export class EditProductComponent implements OnInit, OnDestroy {
     canvas.width = img.width;
     canvas.height = img.height;
     const ctx = canvas.getContext("2d");
+
     // This will draw image
     ctx.drawImage(img, 0, 0);
+
     // Convert the drawn image to Data URL
     const dataURL = canvas.toDataURL("image/png");
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
 
+  // Gets the url of the given images and returns its Base64
   getBase64ImageFromURL(url: string) {
     return new Observable((observer: Observer<string>) => {
-      // create an image object
-
+      // Create an image object
       const img = new Image();
       img.crossOrigin = "Anonymous";
       img.src = url;
+
+      // Checks if image is fully loaded, if not, keep reading
       if (!img.complete) {
         // This will call another method that will create image from url
         img.onload = () => {
@@ -315,6 +336,7 @@ export class EditProductComponent implements OnInit, OnDestroy {
           observer.error(err);
         };
       } else {
+        // Transmit base64 data
         observer.next(this.getBase64Image(img));
         observer.complete();
       }

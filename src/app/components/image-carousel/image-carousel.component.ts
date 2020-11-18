@@ -7,16 +7,14 @@ import { Subscription } from "rxjs";
   templateUrl: "./image-carousel.component.html",
   styleUrls: ["./image-carousel.component.scss"],
 })
-export class ImageCarouselComponent implements OnInit, OnDestroy {
+export class ImageCarouselComponent implements OnInit {
   @Input() images: string[];
   imageObjects: { path: string }[];
-  constructor(private productService: ProductsService) {}
 
   ngOnInit() {
+    // Map images to an object that Carousel component understands
     this.imageObjects = this.images.map((image) => {
       return { path: image };
     });
   }
-
-  ngOnDestroy() {}
 }

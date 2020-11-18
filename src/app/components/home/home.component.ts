@@ -29,10 +29,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
+        // Validate user auth status
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserID();
       });
 
+    // Get all products from DB
     this.productService.getProducts();
 
     this.productsSubscription = this.productService
@@ -41,6 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.products = products;
       });
 
+    // Filter products by user
     this.checkAndFilter(this.products);
   }
 
@@ -48,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.productsSubscription.unsubscribe();
     this.authStatusSubscription.unsubscribe();
   }
-
+  // Filter products by user
   checkAndFilter(products: Product[]) {
     if (this.router.url === "/my-products") {
       this.products = products.filter(
@@ -60,6 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.inMyProducts = false;
     }
   }
+  
   changeModalStatus(modalStatus: any) {
     this.modalOpen = modalStatus;
   }

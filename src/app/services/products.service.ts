@@ -17,17 +17,14 @@ export class ProductsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  // Get all products from backend, and transform into a frontend Product object
   getProducts() {
     this.http
       .get<{ transformedProducts: any }>(BACKEND_URL)
       .pipe(
         map((productData) => {
-          console.log(productData);
-
           return {
             products: productData.transformedProducts.map((product) => {
-              console.log(product);
-
               return {
                 title: product.title,
                 description: product.description,
@@ -43,6 +40,7 @@ export class ProductsService {
         })
       )
       .subscribe((transformedProductData) => {
+        // Transmit all products to components
         this.products = transformedProductData.products;
         this.productsChangedSubject.next([...this.products]);
       });
@@ -71,6 +69,8 @@ export class ProductsService {
     const productData = new FormData();
     productData.append("title", product.title);
     productData.append("description", product.description);
+
+    // Append all tags as array to FormData so it comes as an array
     if (product.tags.length > 0) {
       product.tags.forEach((tag) => {
         productData.append("tags", tag);
@@ -78,13 +78,15 @@ export class ProductsService {
     }
     productData.append("condition", product.condition);
     productData.append("ownerId", product.owner.id);
+
+    // Append all images as array to FormData
     const files: Array<File> = images;
     for (let i = 0; i < files.length; i++) {
       productData.append("images[]", images[i], images[i]["name"]);
     }
-    productData.append("inTrade", "false");
-    console.log(product.owner);
+    productData.append("inTrade", "false"); // Future property to determine if this product is currently being traded
 
+    // If there's an ID, perform update, if not, perform post
     if (id) {
       this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {
         console.log(responseData);
@@ -94,14 +96,15 @@ export class ProductsService {
         console.log(responseData);
       });
     }
+    // When done, get products and transmit to components
     this.getProducts();
     this.productsChangedSubject.next([...this.products]);
     this.router.navigate(["/my-products"]);
   }
 
   deleteProduct(id: string) {
+    // Delete product, when done, remove from local array and transmit products to components
     this.http.delete(BACKEND_URL + id).subscribe((res) => {
-      console.log(res);
       this.products.splice(
         this.products.findIndex((product) => product.id === id),
         1

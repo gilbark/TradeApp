@@ -10,12 +10,11 @@ const BACKEND_URL = environment.apiUrl + "/users/";
   providedIn: "root",
 })
 export class AuthService {
-  private timer: NodeJS.Timer;
-
+  private timer: NodeJS.Timer; // Used to auto log off user when token expires
   private token: string;
   private isAuthenticated = false;
   private userId: string;
-  private authStatusListener = new Subject<boolean>();
+  private authStatusListener = new Subject<boolean>(); // Will transmit user authentication status to other components
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -33,7 +32,7 @@ export class AuthService {
   }
 
   createUser(form: any) {
-    console.log(form.form.value);
+    // Get data from form and map to a data body which the API knows
     const userToCreate = {
       email: form.form.value.email,
       username: form.form.value.username,
@@ -44,6 +43,7 @@ export class AuthService {
         city: form.form.value.city,
       },
     };
+
     this.http.post(BACKEND_URL, userToCreate).subscribe(
       (response) => {
         this.authStatusListener.next(true);
@@ -66,11 +66,13 @@ export class AuthService {
           this.token = response.token;
           if (this.token) {
             const expiresInDuration = response.expiresIn;
+            // Initialize token expirety timer
             this.setAuthTimer(expiresInDuration);
             this.isAuthenticated = true;
             this.authStatusListener.next(true);
             this.userId = response.userId;
 
+            // Save user token to localstorage
             this.saveAuthData(
               this.token,
               new Date(new Date().getTime() + expiresInDuration * 1000),
@@ -96,6 +98,7 @@ export class AuthService {
     this.router.navigate(["/"]);
   }
 
+  // Checks if user's token is in their localstorage and is valid, if so, automatically log them in
   autoAuthUser() {
     const authInformation = this.getAuthData();
     if (!authInformation) {
@@ -113,18 +116,21 @@ export class AuthService {
     }
   }
 
+  // Remove token from localstorage
   private clearAuthData() {
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
   }
 
+  // Save token to localstorage
   private saveAuthData(token: string, expirationDate: Date, userId: string) {
     localStorage.setItem("token", token);
     localStorage.setItem("expiration", expirationDate.toISOString());
     localStorage.setItem("userId", userId);
   }
 
+  // Read token data
   private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
@@ -139,6 +145,7 @@ export class AuthService {
     };
   }
 
+  // Token expirety timer
   private setAuthTimer(duration: number) {
     this.timer = setTimeout(() => {
       this.logout();

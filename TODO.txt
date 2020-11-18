@@ -1,0 +1,13 @@
+++ Auth guard
+++ Resolvers
+++ User Rating
+++ Testing
+    1 day
+
+++ Paging 
+++ Filtering
+    1 day
+
+++ Search by tags implementation
+    1-2 day
+
