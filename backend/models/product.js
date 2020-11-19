@@ -30,6 +30,12 @@ const productSchema = mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  offers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Trade",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Product", productSchema);

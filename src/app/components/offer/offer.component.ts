@@ -1,3 +1,4 @@
+import { TradeService } from "./../../services/trade.service";
 import { AuthService } from "src/app/services/auth.service";
 import { ProductsService } from "./../../services/products.service";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
@@ -12,12 +13,14 @@ import { Subscription } from "rxjs";
 })
 export class OfferComponent implements OnInit, OnDestroy {
   products: Product[];
+  @Input() currProduct: Product;
   private userId: string;
   private authStatusSubscription: Subscription;
 
   constructor(
     private productService: ProductsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private tradeService: TradeService
   ) {}
 
   ngOnInit() {
@@ -28,7 +31,9 @@ export class OfferComponent implements OnInit, OnDestroy {
       });
     this.products = this.productService.getMyProducts();
   }
-
+  submitOffer(id: string) {
+    this.tradeService.createTrade(this.currProduct.id, id);
+  }
   ngOnDestroy() {
     this.authStatusSubscription.unsubscribe();
   }

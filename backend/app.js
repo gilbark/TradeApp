@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const productsRoute = require("./routes/product");
 const usersRoute = require("./routes/user");
+const tradesRoute = require("./routes/trade");
 const app = express();
 
 // Connect to DB
@@ -51,5 +52,6 @@ app.use("/images", express.static(path.join("backend/images")));
 // Use router
 app.use("/api/products", productsRoute);
 app.use("/api/users", usersRoute);
+app.use("/api/trades", tradesRoute);
 
 module.exports = app;

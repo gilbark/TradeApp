@@ -1,5 +1,4 @@
-++ User Rating
-++ Testing
+
 ++ Offer functionality
     1 day
 

@@ -1,3 +1,4 @@
+import { TradeService } from "./../../services/trade.service";
 import { ProductsService } from "./../../services/products.service";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Product } from "src/app/models/product.model";
@@ -16,13 +17,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   modalOpen = false;
   userIsAuthenticated = false;
   userId: string;
+  offers: string[];
   private productsSubscription: Subscription;
   private authStatusSubscription: Subscription;
 
   constructor(
     private productService: ProductsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private tradeService: TradeService
   ) {}
 
   ngOnInit() {
@@ -47,6 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             return product.owner._id === this.userId;
           });
           this.inMyProducts = true;
+          this.tradeService.getMyOffers();
         } else {
           this.products = products;
           this.inMyProducts = false;
