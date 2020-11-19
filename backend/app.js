@@ -1,13 +1,12 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
-const User = require("./models/user");
 const path = require("path");
 const productsRoute = require("./routes/product");
+const usersRoute = require("./routes/user");
 const app = express();
 
+// Connect to DB
 mongoose
   .connect(
     "mongodb+srv://gil:" +
@@ -19,6 +18,7 @@ mongoose
   })
   .catch((e) => console.log(e));
 
+// Ignore/skip the favicon.ico call (workaround)
 app.use((req, res, next) => {
   if (req.originalUrl && req.originalUrl.split("/").pop() === "favicon.ico") {
     return res.sendStatus(204);
@@ -27,9 +27,11 @@ app.use((req, res, next) => {
   return next();
 });
 
+// Need body parser for post/put calls
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Set headers (mainly CORS allow all)
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -42,100 +44,12 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+// Set the static path for images (External use)
 app.use("/images", express.static(path.join("backend/images")));
 
-// Products
+// Use router
 app.use("/api/products", productsRoute);
-
-// Users
-// POST: Create a user
-app.post("/api/users", (req, res, next) => {
-  console.log(req.body);
-  bcrypt.hash(req.body.password, 10).then((hash) => {
-    const user = new User({
-      email: req.body.email,
-      username: req.body.username,
-      password: hash,
-      address: req.body.address,
-      rating: { value: 0, arrOfRatings: [] },
-    });
-    user
-      .save()
-      .then((result) => {
-        res.status(201).json({ message: "User saved" });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({
-          message: "User could not be saved",
-        });
-      });
-  });
-});
-
-// GET: Get all users
-app.get("/api/users", async (req, res) => {
-  User.find()
-    .then((users) => {
-      if (!users) {
-        return res.status(500).json({ message: "Cannot retrieve users" });
-      }
-      res.status(200).json({ users });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: "Cannot retrieve users" });
-    });
-});
-
-app.delete("/api/users", (req, res, next) => {
-  User.deleteMany()
-    .then((response) => {
-      res.status(200).json({ message: "Users deleted" });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Cant delete users" });
-    });
-});
-
-app.post("/api/users/login", (req, res, next) => {
-  let fetchedUser;
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({ message: "Authentication failed" });
-      }
-      fetchedUser = user;
-      return bcrypt.compare(req.body.password, user.password);
-    })
-    .then((result) => {
-      if (!result) {
-        return res.status(401).json({
-          message: "Invalid authentication credentials",
-        });
-      }
-      const token = jwt.sign(
-        {
-          email: fetchedUser.email,
-          userId: fetchedUser._id,
-        },
-        process.env.JWT_KEY,
-        {
-          expiresIn: "1h",
-        }
-      );
-      res.status(200).json({
-        message: "Logged in successfuly",
-        token,
-        expiresIn: 3600,
-        userId: fetchedUser._id,
-      });
-    })
-    .catch((err) => {
-      return res.status(401).json({
-        message: "Invalid authentication credentials",
-      });
-    });
-});
+app.use("/api/users", usersRoute);
 
 module.exports = app;

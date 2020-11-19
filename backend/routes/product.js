@@ -1,15 +1,15 @@
 const express = require("express");
-// const checkAuth = require("../middleware/check-auth");
+const checkAuth = require("../middleware/check-auth");
 const ProductController = require("../controllers/product");
 const fileExtension = require("../middleware/file");
 
 const router = express.Router();
 
 // POST: Create a product
-router.post("", fileExtension, ProductController.addProduct);
+router.post("", checkAuth, fileExtension, ProductController.addProduct);
 
 // PUT: Update a product
-router.put("/:id", fileExtension, ProductController.updateProduct);
+router.put("/:id", checkAuth, fileExtension, ProductController.updateProduct);
 
 // GET: Get all products
 router.get("", ProductController.getProducts);
@@ -18,9 +18,9 @@ router.get("", ProductController.getProducts);
 router.get("/:id", ProductController.getProductById);
 
 // DELETE: Delete one product by ID
-router.delete("/:id", ProductController.deleteProduct);
+router.delete("/:id", checkAuth, ProductController.deleteProduct);
 
 // DELETE: Delete all products
-router.delete("", ProductController.deleteAllProducts);
+router.delete("", checkAuth, ProductController.deleteAllProducts);
 
 module.exports = router;

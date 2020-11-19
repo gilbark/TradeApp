@@ -1,7 +1,10 @@
 const Product = require("../models/product");
 
 exports.addProduct = (req, res, next) => {
+  // Set server url dynamically
   const serverUrl = req.protocol + "://" + req.get("host");
+
+  // Map product from request body
   const product = new Product({
     title: req.body.title,
     description: req.body.description,
@@ -13,7 +16,8 @@ exports.addProduct = (req, res, next) => {
     inTrade: req.body.inTrade,
     owner: req.body.ownerId,
   });
-  console.log(product);
+
+  // Attempt save product
   product
     .save()
     .then((result) => {
@@ -25,7 +29,10 @@ exports.addProduct = (req, res, next) => {
 };
 
 exports.updateProduct = (req, res, next) => {
+  // Set server url dynamically
   const serverUrl = req.protocol + "://" + req.get("host");
+
+  // Map product from request body
   const product = {
     title: req.body.title,
     description: req.body.description,
@@ -36,8 +43,9 @@ exports.updateProduct = (req, res, next) => {
     tags: req.body.tags,
     inTrade: req.body.inTrade,
   };
-  console.log(product.images);
-  Product.updateOne({ _id: req.params.id }, product)
+
+  // Attempt update product (find by product id and user id from checkAuth middleware -> products can only be updated by the user logged in)
+  Product.updateOne({ _id: req.params.id, owner: req.userData.userId }, product)
     .then((result) => {
       if (result.n > 0) {
         res.status(200).json({ message: "Update successful" });
@@ -54,12 +62,14 @@ exports.updateProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  // Find and populate the owner on products
   Product.find()
     .populate("owner")
     .exec((err, products) => {
       if (!products) {
         return res.status(500).json({ message: "Unable to retrieve products" });
       }
+      // Map and transform the products from request
       const transformedProducts = products.map((product) => {
         return {
           condition: product.condition,
@@ -76,12 +86,12 @@ exports.getProducts = (req, res, next) => {
           },
         };
       });
-      console.log(transformedProducts);
       res.status(200).json({ transformedProducts });
     });
 };
 
 exports.getProductById = (req, res, next) => {
+  // Get one product by ID and populate the owner
   Product.findOne({ _id: req.params.id })
     .populate("owner")
     .exec((err, product) => {
@@ -94,9 +104,12 @@ exports.getProductById = (req, res, next) => {
 };
 
 exports.deleteProduct = (req, res, next) => {
+  // Try deleting the product.
+  // Finds the product by product ID and currently logged in user
   try {
     const product = Product.findOneAndDelete({
       _id: req.params.id,
+      owner: req.userData.userId,
     }).then((result) => {
       if (result) {
         return res.status(200).json({ message: "Product deleted" });
@@ -113,6 +126,7 @@ exports.deleteProduct = (req, res, next) => {
   }
 };
 
+// INTERNAL USE ONLY
 exports.deleteAllProducts = (req, res, next) => {
   Product.deleteMany()
     .then((results) => {
