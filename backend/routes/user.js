@@ -14,6 +14,6 @@ router.post("/login", UserController.loginUser);
 router.get("", UserController.getUsers);
 
 // DELETE: Delete all users
-router.delete("/api/users", UserController.deleteUser);
+router.delete("", UserController.deleteUsers);
 
 module.exports = router;

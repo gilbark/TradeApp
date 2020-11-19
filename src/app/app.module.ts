@@ -1,3 +1,4 @@
+import { AuthGuard } from "./guards/auth.guard";
 import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { DeleteDialogComponent } from "./components/delete-dialog/delete-dialog.component";
@@ -42,7 +43,7 @@ import { HttpClientModule } from "@angular/common/http";
     HttpClientModule,
     PipeModule.forRoot(),
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

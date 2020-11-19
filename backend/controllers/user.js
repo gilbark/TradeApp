@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("./models/user");
+const User = require("../models/user");
 
 // Users
 // POST: Create a user
@@ -17,7 +17,24 @@ exports.createUser = (req, res, next) => {
     user
       .save()
       .then((result) => {
-        res.status(201).json({ message: "User saved" });
+        const token = jwt.sign(
+          {
+            email: user.email,
+            userId: user._id,
+          },
+          process.env.JWT_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
+        res
+          .status(201)
+          .json({
+            message: "User saved",
+            expiresIn: 3600,
+            token: token,
+            userId: user._id,
+          });
       })
       .catch((err) => {
         console.log(err);

@@ -44,13 +44,31 @@ export class AuthService {
       },
     };
 
-    this.http.post(BACKEND_URL, userToCreate).subscribe(
-      (response) => {
-        this.authStatusListener.next(true);
-        this.router.navigate(["/"]);
-      },
-      (error) => {}
-    );
+    this.http
+      .post<{ token: string; expiresIn: number; userId: string }>(
+        BACKEND_URL + "signup",
+        userToCreate
+      )
+      .subscribe(
+        (response) => {
+          this.isAuthenticated = true;
+          // After user created successfuly transmit true to other components
+          this.authStatusListener.next(true);
+
+          // Save token data
+          this.saveAuthData(
+            response.token,
+            new Date(new Date().getTime() + response.expiresIn * 1000),
+            response.userId
+          );
+
+          // Start token expirety timer
+          this.setAuthTimer(response.expiresIn);
+
+          this.router.navigate(["/"]);
+        },
+        (error) => {}
+      );
   }
 
   login(email: string, password: string) {
