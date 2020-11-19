@@ -16,7 +16,6 @@ exports.addProduct = (req, res, next) => {
     inTrade: req.body.inTrade,
     owner: req.body.ownerId,
   });
-
   // Attempt save product
   product
     .save()

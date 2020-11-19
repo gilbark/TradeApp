@@ -1,14 +1,13 @@
 import { AuthGuard } from "./guards/auth.guard";
-import { LoginComponent } from "./components/login/login.component";
-import { RegisterComponent } from "./components/register/register.component";
 import { EditProductComponent } from "./components/edit-product/edit-product.component";
 import { ProductPageComponent } from "./components/product-page/product-page.component";
-import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { ProductPreviewComponent } from "./components/product-preview/product-preview.component";
 import { HomeComponent } from "./components/home/home.component";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule, Routes } from "@angular/router";
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },

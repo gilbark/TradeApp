@@ -89,17 +89,21 @@ export class ProductsService {
     // If there's an ID, perform update, if not, perform post
     if (id) {
       this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {
-        console.log(responseData);
+        this.getNewProducts();
       });
     } else {
       this.http.post(BACKEND_URL, productData).subscribe((responseData) => {
-        console.log(responseData);
+        this.getNewProducts();
       });
     }
-    // When done, get products and transmit to components
+
+    // When done, navigate to my-products
+    this.router.navigate(["/my-products"]);
+  }
+
+  getNewProducts() {
     this.getProducts();
     this.productsChangedSubject.next([...this.products]);
-    this.router.navigate(["/my-products"]);
   }
 
   deleteProduct(id: string) {

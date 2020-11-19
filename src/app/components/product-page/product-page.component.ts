@@ -19,6 +19,7 @@ export class ProductPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.product.images = [];
     this.route.params.subscribe((params: Params) => {
       this.productId = params["id"];
       this.productService.getProduct(this.productId).subscribe((product) => {

@@ -18,10 +18,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((response) => {
-        console.log(response);
+        this.loginFailed = !response;
       });
   }
   loginUser(form: NgForm) {
+    this.loginFailed = false;
     if (!form.valid) {
       return;
     }
