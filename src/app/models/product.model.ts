@@ -1,3 +1,4 @@
+import { User } from "./user.model";
 export interface Product {
   id: string;
   title: string;
@@ -5,9 +6,5 @@ export interface Product {
   condition: string;
   images: string[] | File[];
   tags?: string[];
-  owner: {
-    id: string;
-    username?: string;
-  };
-  rating?: number; // TODO: Remove when getting user by authentication
+  owner: User;
 }

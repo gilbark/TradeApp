@@ -94,11 +94,25 @@ exports.getProductById = (req, res, next) => {
   Product.findOne({ _id: req.params.id })
     .populate("owner")
     .exec((err, product) => {
-      console.log(product);
       if (!product) {
         return res.status(500).json({ message: "Unable to retrieve product" });
       }
-      res.status(200).json({ product });
+      const transformedProduct = {
+        condition: product.condition,
+        description: product.description,
+        images: product.images,
+        inTrade: product.inTrade,
+        tags: product.tags,
+        title: product.title,
+        _id: product._id,
+        owner: {
+          username: product.owner.username,
+          _id: product.owner._id,
+          rating: product.owner.rating.value,
+        },
+      };
+      console.log(transformedProduct);
+      res.status(200).json({ transformedProduct });
     });
 };
 

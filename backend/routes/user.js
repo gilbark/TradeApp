@@ -9,6 +9,9 @@ router.post("/signup", UserController.createUser);
 // POST: Login user
 router.post("/login", UserController.loginUser);
 
+// POST: Update user rating
+router.post("/:id", UserController.updateRating);
+
 // INTERNAL UES ROUTES
 // GET: Get all users
 router.get("", UserController.getUsers);

@@ -15,6 +15,7 @@
 .details {
   display: flex;
   flex-direction: row;
+  width: 90%;
 }
 
 .product-info-left {
@@ -66,4 +67,8 @@
     // position: relative;
     // display: flex;
   }
+}
+
+mat-spinner {
+  margin: auto;
 }

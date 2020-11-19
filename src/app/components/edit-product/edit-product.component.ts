@@ -99,17 +99,19 @@ export class EditProductComponent implements OnInit, OnDestroy {
       this.editMode = this.id ? true : false;
       if (this.editMode) {
         // If is in editmode (there's an ID) map response to object that frontend understands
-        this.productService.getProduct(this.id).subscribe((productData) => {
-          this.product = {
-            id: productData.product._id,
-            title: productData.product.title,
-            description: productData.product.description,
-            tags: productData.product.tags,
-            condition: productData.product.condition,
-            images: productData.product.images,
-            owner: productData.product.owner,
-            rating: productData.product.owner.rating.value,
+        this.productService.getProduct(this.id).subscribe((response) => {
+          console.log(response);
+
+          const transformedProduct = {
+            id: response.transformedProduct._id,
+            title: response.transformedProduct.title,
+            description: response.transformedProduct.description,
+            condition: response.transformedProduct.condition,
+            images: response.transformedProduct.images,
+            owner: response.transformedProduct.owner,
+            tags: response.transformedProduct.tags,
           };
+          this.product = transformedProduct;
 
           // Set the condition (Used/New etc...)
           this.selectedCondition = this.conditions[
@@ -117,6 +119,8 @@ export class EditProductComponent implements OnInit, OnDestroy {
               (condition) => condition.viewValue === this.product.condition
             )
           ].value;
+
+          console.log(this.product);
 
           // Set received data to form
           this.form.setValue({
@@ -178,9 +182,8 @@ export class EditProductComponent implements OnInit, OnDestroy {
       )[0].viewValue,
       tags: this.tags,
       id: this.id,
-      rating: 4,
       owner: {
-        id: this.userId,
+        _id: this.userId,
       },
     };
     if (this.editMode) {

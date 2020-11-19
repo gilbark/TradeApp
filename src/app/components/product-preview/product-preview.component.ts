@@ -13,6 +13,7 @@ import { Product } from "src/app/models/product.model";
 import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "src/app/services/auth.service";
 import { Subscription } from "rxjs";
+import { StarRatingComponent } from "ng-starrating";
 
 @Component({
   selector: "app-product-preview",
@@ -36,6 +37,8 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.userId = this.authService.getUserID();
+
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
@@ -64,6 +67,15 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
         this.productService.deleteProduct(this.product.id);
       }
     });
+  }
+
+  // When rating component clicked
+  onRate($event: {
+    oldValue: number;
+    newValue: number;
+    starRating: StarRatingComponent;
+  }) {
+    this.authService.updateUserRating(this.product.owner._id, $event.newValue);
   }
 
   ngOnDestroy() {

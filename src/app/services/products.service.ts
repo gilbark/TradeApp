@@ -1,3 +1,4 @@
+import { AuthService } from "src/app/services/auth.service";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -15,7 +16,11 @@ export class ProductsService {
   private productsChangedSubject = new Subject<Product[]>();
   private products: Product[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   // Get all products from backend, and transform into a frontend Product object
   getProducts() {
@@ -31,9 +36,8 @@ export class ProductsService {
                 id: product._id,
                 images: product.images,
                 condition: product.condition,
-                owner: product.owner.username,
+                owner: product.owner,
                 tags: product.tags,
-                rating: product.owner.rating.value,
               };
             }),
           };
@@ -52,7 +56,7 @@ export class ProductsService {
 
   getProduct(id: string) {
     return this.http.get<{
-      product: {
+      transformedProduct: {
         _id: string;
         title: string;
         description: string;
@@ -77,7 +81,7 @@ export class ProductsService {
       });
     }
     productData.append("condition", product.condition);
-    productData.append("ownerId", product.owner.id);
+    productData.append("ownerId", product.owner._id);
 
     // Append all images as array to FormData
     const files: Array<File> = images;
@@ -104,6 +108,12 @@ export class ProductsService {
   getNewProducts() {
     this.getProducts();
     this.productsChangedSubject.next([...this.products]);
+  }
+
+  getMyProducts() {
+    return this.products.filter(
+      (product) => product.owner._id === this.authService.getUserID()
+    );
   }
 
   deleteProduct(id: string) {

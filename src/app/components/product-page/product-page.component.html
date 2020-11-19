@@ -1,7 +1,9 @@
 <div class="product-container">
-  <div class="product-info-left">
+  <mat-spinner *ngIf="loading"></mat-spinner>
+
+  <div *ngIf="!loading" class="product-info-left">
     <div class="images">
-      <app-image-carousel [images]="product.images"></app-image-carousel>
+      <app-image-carousel [images]="product?.images"></app-image-carousel>
     </div>
     <span class="details">
       <div class="product-info-details">
@@ -11,12 +13,12 @@
         <p>Condition: {{ product.condition }}</p>
       </div>
       <div class="user-details">
-        <h4>{{ product.owner }}</h4>
+        <h4>{{ product.owner.username }}</h4>
         <div class="user-rating">
           <p>User rating</p>
           <div>
             <star-rating
-              [value]="product.rating"
+              [value]="product.owner.rating"
               [totalstars]="5"
               checkedcolor="gold"
               uncheckedcolor="grey"

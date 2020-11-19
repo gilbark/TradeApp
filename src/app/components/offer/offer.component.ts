@@ -12,33 +12,24 @@ import { Subscription } from "rxjs";
 })
 export class OfferComponent implements OnInit, OnDestroy {
   products: Product[];
-  productsSubject: Subscription;
   private userId: string;
   private authStatusSubscription: Subscription;
 
   constructor(
     private productService: ProductsService,
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    // this.productService.getProducts();
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
-      .subscribe((authStatus) => {});
-    this.userId = this.authService.getUserID();
-    
-    this.productsSubject = this.productService
-      .getProductsSubject()
-      .subscribe((products: Product[]) => {
-        return (this.products = products.filter(
-          (product) => product.owner.id === this.userId
-        ));
+      .subscribe((authStatus) => {
+        this.userId = this.authService.getUserID();
       });
+    this.products = this.productService.getMyProducts();
   }
 
   ngOnDestroy() {
-    this.productsSubject.unsubscribe();
+    this.authStatusSubscription.unsubscribe();
   }
 }

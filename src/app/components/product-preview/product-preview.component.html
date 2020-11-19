@@ -16,17 +16,18 @@
       </div>
       <div class="preview-right">
         <div class="user-details">
-          <h4>{{ product.owner }}</h4>
+          <h4>{{ product.owner.username }}</h4>
           <div class="user-rating">
             <p>User rating</p>
             <div>
               <star-rating
-                [value]="product.rating"
+                [value]="product.owner.rating"
                 [totalstars]="5"
                 checkedcolor="gold"
                 uncheckedcolor="grey"
                 size="16px"
-                readonly="false"
+                [readonly]="userId === product.owner._id"
+                (rate)="onRate($event)"
               ></star-rating>
             </div>
           </div>
@@ -55,14 +56,10 @@
         Delete
       </a>
 
-      <mat-accordion *ngIf="userLoggedIn ">
+      <mat-accordion *ngIf="userLoggedIn && product.owner._id !== userId">
         <mat-expansion-panel hideToggle="true">
           <mat-expansion-panel-header>
-            <button
-              mat-button
-              class="offer"
-              *ngIf="userLoggedIn && product.owner.id !== userId"
-            >
+            <button mat-button class="offer">
               Offer
             </button></mat-expansion-panel-header
           >

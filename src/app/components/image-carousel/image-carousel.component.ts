@@ -13,8 +13,10 @@ export class ImageCarouselComponent implements OnInit {
 
   ngOnInit() {
     // Map images to an object that Carousel component understands
-    this.imageObjects = this.images.map((image) => {
-      return { path: image };
-    });
+    if (this.images) {
+      this.imageObjects = this.images.map((image) => {
+        return { path: image };
+      });
+    }
   }
 }

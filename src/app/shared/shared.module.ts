@@ -12,6 +12,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatChipsModule } from "@angular/material/chips";
 import { RatingModule } from "ng-starrating";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 const matModules: any[] = [
   MatCardModule,
@@ -24,6 +25,7 @@ const matModules: any[] = [
   MatInputModule,
   MatBadgeModule,
   MatChipsModule,
+  MatProgressSpinnerModule,
 ];
 
 @NgModule({

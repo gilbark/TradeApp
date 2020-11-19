@@ -27,14 +27,12 @@ exports.createUser = (req, res, next) => {
             expiresIn: "1h",
           }
         );
-        res
-          .status(201)
-          .json({
-            message: "User saved",
-            expiresIn: 3600,
-            token: token,
-            userId: user._id,
-          });
+        res.status(201).json({
+          message: "User saved",
+          expiresIn: 3600,
+          token: token,
+          userId: user._id,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -99,6 +97,21 @@ exports.loginUser = (req, res, next) => {
         message: "Invalid authentication credentials",
       });
     });
+};
+
+exports.updateRating = (req, res, next) => {
+  const user = User.findOne({ _id: req.params.id }).then((user) => {
+    user.rating.arrOfRatings.push(req.body.ratingToAdd);
+    user.rating.value =
+      user.rating.arrOfRatings.reduce((a, b) => a + b, 0) /
+      user.rating.arrOfRatings.length;
+    user.save().then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: "Unable to update rating" });
+      }
+      res.status(200).json({ newRating: user.rating.value });
+    });
+  });
 };
 
 // DELETE: Internal use, delete users

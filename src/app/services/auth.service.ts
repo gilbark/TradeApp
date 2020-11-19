@@ -1,3 +1,4 @@
+import { User } from "./../models/user.model";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -132,6 +133,16 @@ export class AuthService {
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
     }
+  }
+
+  updateUserRating(userId: string, newRating: number) {
+    this.http
+      .post<{ newRating: number }>(BACKEND_URL + userId, {
+        ratingToAdd: newRating,
+      })
+      .subscribe((response) => {
+        console.log("User's new rating is: " + response.newRating);
+      });
   }
 
   // Remove token from localstorage
