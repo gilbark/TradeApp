@@ -20,8 +20,8 @@ export class TradeService {
     });
   }
   getMyOffers() {
-    this.http
-      .get<{ offers: string[] }>(BACKEND_URL + this.authService.getUserID())
-      .subscribe((response) => {});
+    return this.http.get<{ offers: [{ offers: string[] }] }>(
+      BACKEND_URL + this.authService.getUserID()
+    );
   }
 }

@@ -53,6 +53,7 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
     } else {
       this.viewingMyProducts = false;
     }
+    console.log(this.userId);
   }
 
   // If delete button clicked, open the Delete modal

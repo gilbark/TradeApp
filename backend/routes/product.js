@@ -12,10 +12,12 @@ router.post("", checkAuth, fileExtension, ProductController.addProduct);
 router.put("/:id", checkAuth, fileExtension, ProductController.updateProduct);
 
 // GET: Get all products
-router.get("", ProductController.getProducts);
+router.get("/:id?", ProductController.getProducts);
 
 // GET: Get one product by ID
-router.get("/:id", ProductController.getProductById);
+router.get("/product/:id", ProductController.getProductById);
+
+// router.get("/my/:id", ProductController.getMyProducts);
 
 // DELETE: Delete one product by ID
 router.delete("/:id", checkAuth, ProductController.deleteProduct);

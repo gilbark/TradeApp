@@ -27,6 +27,23 @@ exports.addProduct = (req, res, next) => {
     });
 };
 
+exports.getMyProducts = (req, res, next) => {
+  console.log("in my products");
+  Product.find()
+    .populate("owner")
+    .exec((err, products) => {
+      if (!products) {
+        console.log("no products");
+        return res.status(500).json({ message: "Unable to retrieve products" });
+      }
+      res.status(200).json({ transformedProducts });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Couldn't fetch products" });
+    });
+};
+
 exports.updateProduct = (req, res, next) => {
   // Set server url dynamically
   const serverUrl = req.protocol + "://" + req.get("host");
@@ -111,7 +128,6 @@ exports.getProductById = (req, res, next) => {
           rating: product.owner.rating.value,
         },
       };
-      console.log(transformedProduct);
       res.status(200).json({ transformedProduct });
     });
 };
@@ -134,7 +150,6 @@ exports.deleteProduct = (req, res, next) => {
     }
     res.send(product);
   } catch (error) {
-    console.log(error);
     return res.status(404).send();
   }
 };

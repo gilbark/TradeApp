@@ -29,8 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Handle Auth
     this.userId = this.authService.getUserID();
-
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
@@ -39,23 +39,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.userId = this.authService.getUserID();
       });
 
-    // Get all products from DB
-    this.productService.getProducts();
-
     this.productsSubscription = this.productService
       .getProductsSubject()
       .subscribe((products) => {
+        // Get all products from DB or my products if on my-products
         if (this.router.url === "/my-products") {
-          this.products = products.filter((product) => {
-            return product.owner._id === this.userId;
-          });
+          this.products = products.filter(
+            (product) => product.owner._id === this.userId
+          );
           this.inMyProducts = true;
-          this.tradeService.getMyOffers();
         } else {
           this.products = products;
           this.inMyProducts = false;
         }
       });
+    this.productService.getProducts();
   }
 
   ngOnDestroy() {

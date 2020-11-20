@@ -22,6 +22,12 @@ export class ProductsService {
     private authService: AuthService
   ) {}
 
+  getLocalProducts() {
+    return this.products.filter(
+      (product) => product.owner._id === this.authService.getUserID()
+    );
+  }
+
   // Get all products from backend, and transform into a frontend Product object
   getProducts() {
     this.http
@@ -50,6 +56,16 @@ export class ProductsService {
       });
   }
 
+  getMyProducts() {
+    this.http
+      .get<{ products }>(BACKEND_URL + "/my/" + this.authService.getUserID())
+      .subscribe((response) => {
+        response.products.forEach((p) => {
+          this.products = response.products;
+          this.productsChangedSubject.next([...this.products]);
+        });
+      });
+  }
   getProductsSubject() {
     return this.productsChangedSubject.asObservable();
   }
@@ -66,7 +82,7 @@ export class ProductsService {
         owner: any;
         rating: any;
       };
-    }>(BACKEND_URL + id);
+    }>(BACKEND_URL + "product/" + id);
   }
 
   updateProducts(product: Product, images: File[], id?: string) {
@@ -110,11 +126,11 @@ export class ProductsService {
     this.productsChangedSubject.next([...this.products]);
   }
 
-  getMyProducts() {
-    return this.products.filter(
-      (product) => product.owner._id === this.authService.getUserID()
-    );
-  }
+  // getMyProducts() {
+  //   return this.products.filter(
+  //     (product) => product.owner._id === this.authService.getUserID()
+  //   );
+  // }
 
   deleteProduct(id: string) {
     // Delete product, when done, remove from local array and transmit products to components
@@ -126,6 +142,4 @@ export class ProductsService {
       this.productsChangedSubject.next([...this.products]);
     });
   }
-
-  
 }
