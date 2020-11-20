@@ -1,7 +1,6 @@
 const Trade = require("../models/trade");
 const Product = require("../models/product");
 const User = require("../models/user");
-const { $where } = require("../models/trade");
 
 exports.newOffer = (req, res, next) => {
   const trade = new Trade({
@@ -11,8 +10,10 @@ exports.newOffer = (req, res, next) => {
   });
 
   Product.findOne({ _id: trade.forProduct }).then((product) => {
-    product.offers.push(trade.offeredProduct);
-    product.save().then((result) => {});
+    product.offers.push(trade._id);
+    product.save().then((result) => {
+      console.log(result);
+    });
   });
 
   Product.find().then((res) => console.log(res));
@@ -20,12 +21,13 @@ exports.newOffer = (req, res, next) => {
   trade
     .save()
     .then((result) => {
-      res.status(201).json({});
+      res.status(201).json({ trade });
     })
     .catch((err) => {
       res.status(500).json({ message: "Unable to create trade" });
     });
 };
+
 exports.cancelOffer = (req, res, next) => {};
 exports.getMyOffers = (req, res, next) => {
   // Get my user

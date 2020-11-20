@@ -7,6 +7,8 @@ mat-card-content {
 mat-card-actions {
   padding: 15px;
   margin-left: 355px;
+  display: flex;
+  align-items: baseline;
 
   .offer {
     background-color: rgb(29, 202, 29);
@@ -28,6 +30,20 @@ mat-card-actions {
     border-radius: 25px;
     text-align: center;
     width: 80px;
+  }
+  .offers {
+    background-color: rgb(57, 188, 221);
+    color: white;
+    border-radius: 25px;
+    text-align: center;
+    width: fit-content;
+  }
+  .accordion-container {
+    mat-expansion-panel-header {
+      padding: 0 8px;
+      width: fit-content;
+      margin-right: 10px;
+    }
   }
 }
 
@@ -61,10 +77,6 @@ mat-card-actions {
 
 .mat-expansion-panel {
   box-shadow: 0 0 BLACK;
-}
-mat-expansion-panel-header {
-  padding: 0 8px;
-  width: 80px;
 }
 
 @media (max-width: 900px) {

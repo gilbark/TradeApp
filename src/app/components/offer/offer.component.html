@@ -1,8 +1,33 @@
+<!-- This will show where you have offers to your product -->
 <div class="offer-component">
-  <mat-accordion [multi]="false">
+  <mat-accordion *ngIf="viewingMyProducts">
     <mat-expansion-panel *ngFor="let product of products">
-      <mat-expansion-panel-header
-        ><div class="offer-product-expansion-header">
+      <mat-expansion-panel-header>
+        <div class="offer-product-expansion-header">
+          <img class="image-thumbnail" [src]="product.images[0]" />
+          <strong> {{ product.title }}</strong>
+        </div>
+      </mat-expansion-panel-header>
+      <div>
+        <button
+          mat-button
+          class="offer-button"
+          (click)="submitOffer(product.id)"
+        >
+          Confirm
+        </button>
+        <button mat-button [routerLink]="['/view', product.id]">
+          View More
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- This will show only to make offers -->
+  <mat-accordion [multi]="false" *ngIf="!viewingMyProducts">
+    <mat-expansion-panel *ngFor="let product of products">
+      <mat-expansion-panel-header>
+        <div class="offer-product-expansion-header">
           <img class="image-thumbnail" [src]="product.images[0]" />
           <strong> {{ product.title }}</strong>
         </div>

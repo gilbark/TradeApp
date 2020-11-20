@@ -55,17 +55,27 @@
       >
         Delete
       </a>
+      <div class="accordion-container" *ngIf="userLoggedIn">
+        <mat-accordion *ngIf="viewingMyProducts && product.offers.length > 0">
+          <mat-expansion-panel hideToggle="true">
+            <mat-expansion-panel-header>
+              <button mat-button class="offers">
+                Offers ({{ product.offers.length }})
+              </button>
+            </mat-expansion-panel-header>
+            <app-offer [currProduct]="product"></app-offer>
+          </mat-expansion-panel>
+        </mat-accordion>
 
-      <mat-accordion *ngIf="userLoggedIn && product.owner._id !== userId">
-        <mat-expansion-panel hideToggle="true">
-          <mat-expansion-panel-header>
-            <button mat-button class="offer">
-              Offer
-            </button></mat-expansion-panel-header
-          >
-          <app-offer [currProduct]="product"></app-offer>
-        </mat-expansion-panel>
-      </mat-accordion>
+        <mat-accordion *ngIf="userLoggedIn && product.owner._id !== userId">
+          <mat-expansion-panel hideToggle="true">
+            <mat-expansion-panel-header>
+              <button mat-button class="offer">Offer</button>
+            </mat-expansion-panel-header>
+            <app-offer [currProduct]="product"></app-offer>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
     </mat-card-actions>
   </mat-card-content>
 </mat-card>

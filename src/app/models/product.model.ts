@@ -1,3 +1,4 @@
+import { Offer } from "./offer.model";
 import { User } from "./user.model";
 export interface Product {
   id: string;
@@ -7,4 +8,5 @@ export interface Product {
   images: string[] | File[];
   tags?: string[];
   owner: User;
+  offers?: Offer[];
 }

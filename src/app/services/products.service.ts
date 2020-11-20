@@ -22,10 +22,20 @@ export class ProductsService {
     private authService: AuthService
   ) {}
 
-  getLocalProducts() {
+  getMyProducts() {
     return this.products.filter(
       (product) => product.owner._id === this.authService.getUserID()
     );
+  }
+
+  getMyOffers(productId: string) {
+    // Reach Trade router
+    // Trade router will get all Trade objects which have this product ID as "offeredTo"
+    // Then the results for those trade IDs, will send back to "offer" component an object:
+    // { id: tradeid, thisID, offeredProductID}
+    // Then in the offer component will get this object array, and will do foreach on myproducts, then filter on this array for
+    // thisID and add to its own offeredProducts array this ID
+    // return this.products.filter((product) => product.offers.indexOf(product))
   }
 
   // Get all products from backend, and transform into a frontend Product object
@@ -44,6 +54,7 @@ export class ProductsService {
                 condition: product.condition,
                 owner: product.owner,
                 tags: product.tags,
+                offers: product.offers,
               };
             }),
           };
@@ -56,16 +67,6 @@ export class ProductsService {
       });
   }
 
-  getMyProducts() {
-    this.http
-      .get<{ products }>(BACKEND_URL + "/my/" + this.authService.getUserID())
-      .subscribe((response) => {
-        response.products.forEach((p) => {
-          this.products = response.products;
-          this.productsChangedSubject.next([...this.products]);
-        });
-      });
-  }
   getProductsSubject() {
     return this.productsChangedSubject.asObservable();
   }
@@ -125,12 +126,6 @@ export class ProductsService {
     this.getProducts();
     this.productsChangedSubject.next([...this.products]);
   }
-
-  // getMyProducts() {
-  //   return this.products.filter(
-  //     (product) => product.owner._id === this.authService.getUserID()
-  //   );
-  // }
 
   deleteProduct(id: string) {
     // Delete product, when done, remove from local array and transmit products to components

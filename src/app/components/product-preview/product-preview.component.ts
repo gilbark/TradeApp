@@ -38,7 +38,7 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userId = this.authService.getUserID();
-
+    this.userLoggedIn = this.authService.getIsAuth();
     this.authStatusSubscription = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
@@ -53,7 +53,6 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
     } else {
       this.viewingMyProducts = false;
     }
-    console.log(this.userId);
   }
 
   // If delete button clicked, open the Delete modal

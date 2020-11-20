@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { TradeService } from "./../../services/trade.service";
 import { AuthService } from "src/app/services/auth.service";
 import { ProductsService } from "./../../services/products.service";
@@ -11,8 +12,15 @@ import { Subscription } from "rxjs";
   styleUrls: ["./offer.component.scss"],
 })
 export class OfferComponent implements OnInit, OnDestroy {
-  products: Product[];
+  products: Product[] = [];
+
+  // Used to know if user needs to see the offers on his products
+  viewingMyProducts = false;
+
+  // Gets the product the user has opened this component from
   @Input() currProduct: Product;
+
+  // Private properties
   private userId: string;
   private authStatusSubscription: Subscription;
   private productStatusSubscription: Subscription;
@@ -20,7 +28,8 @@ export class OfferComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductsService,
     private authService: AuthService,
-    private tradeService: TradeService
+    private tradeService: TradeService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -30,9 +39,29 @@ export class OfferComponent implements OnInit, OnDestroy {
         this.userId = this.authService.getUserID();
       });
 
-    this.products = this.productService.getLocalProducts();
+    if (this.router.url === "/my-products") {
+      this.viewingMyProducts = true;
 
-    console.log(this.products);
+      this.currProduct.offers.forEach((offer) => {
+        this.productService
+          .getProduct(offer.offeredProduct)
+          .subscribe((response) => {
+            const transformedProduct = {
+              id: response.transformedProduct._id,
+              title: response.transformedProduct.title,
+              description: response.transformedProduct.description,
+              condition: response.transformedProduct.condition,
+              images: response.transformedProduct.images,
+              owner: response.transformedProduct.owner,
+            };
+
+            this.products.push(transformedProduct);
+          });
+      });
+      console.log(this.currProduct);
+    } else {
+      this.products = this.productService.getMyProducts();
+    }
 
     this.productStatusSubscription = this.productService
       .getProductsSubject()

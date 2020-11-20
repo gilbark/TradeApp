@@ -10,6 +10,7 @@ const BACKEND_URL = environment.apiUrl + "/trades/";
 })
 export class TradeService {
   constructor(private http: HttpClient, private authService: AuthService) {}
+
   createTrade(offeredToId: string, offeredProdId: string) {
     const tradeBody = {
       forId: offeredToId,
@@ -19,6 +20,7 @@ export class TradeService {
       console.log(response);
     });
   }
+  
   getMyOffers() {
     return this.http.get<{ offers: [{ offers: string[] }] }>(
       BACKEND_URL + this.authService.getUserID()

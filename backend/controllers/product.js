@@ -81,6 +81,7 @@ exports.getProducts = (req, res, next) => {
   // Find and populate the owner on products
   Product.find()
     .populate("owner")
+    .populate("offers")
     .exec((err, products) => {
       if (!products) {
         return res.status(500).json({ message: "Unable to retrieve products" });
@@ -100,6 +101,7 @@ exports.getProducts = (req, res, next) => {
             _id: product.owner._id,
             rating: product.owner.rating.value,
           },
+          offers: product.offers,
         };
       });
       res.status(200).json({ transformedProducts });
