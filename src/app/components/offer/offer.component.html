@@ -12,7 +12,7 @@
         <button
           mat-button
           class="offer-button"
-          (click)="submitOffer(product.id)"
+          (click)="acceptOffer(product.id)"
         >
           Confirm
         </button>
@@ -24,7 +24,7 @@
   </mat-accordion>
 
   <!-- This will show only to make offers -->
-  <mat-accordion [multi]="false" *ngIf="!viewingMyProducts">
+  <mat-accordion [multi]="false" *ngIf="!viewingMyProducts && !alreadyOffered">
     <mat-expansion-panel *ngFor="let product of products">
       <mat-expansion-panel-header>
         <div class="offer-product-expansion-header">

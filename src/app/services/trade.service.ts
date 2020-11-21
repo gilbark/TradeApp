@@ -20,7 +20,15 @@ export class TradeService {
       console.log(response);
     });
   }
-  
+
+  acceptOffer(tradeId: string) {
+    this.http
+      .patch(BACKEND_URL + "accept/" + tradeId, {})
+      .subscribe((response) => {
+        console.log(response);
+      });
+  }
+
   getMyOffers() {
     return this.http.get<{ offers: [{ offers: string[] }] }>(
       BACKEND_URL + this.authService.getUserID()

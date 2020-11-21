@@ -1,3 +1,4 @@
+import { Offer } from "./../../models/offer.model";
 import { Router } from "@angular/router";
 import { TradeService } from "./../../services/trade.service";
 import { AuthService } from "src/app/services/auth.service";
@@ -13,13 +14,13 @@ import { Subscription } from "rxjs";
 })
 export class OfferComponent implements OnInit, OnDestroy {
   products: Product[] = [];
-
+  alreadyOffered = false;
   // Used to know if user needs to see the offers on his products
   viewingMyProducts = false;
 
   // Gets the product the user has opened this component from
   @Input() currProduct: Product;
-
+  @Input() myProducts?: Product[];
   // Private properties
   private userId: string;
   private authStatusSubscription: Subscription;
@@ -44,7 +45,7 @@ export class OfferComponent implements OnInit, OnDestroy {
 
       this.currProduct.offers.forEach((offer) => {
         this.productService
-          .getProduct(offer.offeredProduct)
+          .getProduct(offer.forProduct)
           .subscribe((response) => {
             const transformedProduct = {
               id: response.transformedProduct._id,
@@ -58,9 +59,8 @@ export class OfferComponent implements OnInit, OnDestroy {
             this.products.push(transformedProduct);
           });
       });
-      console.log(this.currProduct);
     } else {
-      this.products = this.productService.getMyProducts();
+      this.products = this.myProducts;
     }
 
     this.productStatusSubscription = this.productService
@@ -72,6 +72,16 @@ export class OfferComponent implements OnInit, OnDestroy {
   submitOffer(id: string) {
     this.tradeService.createTrade(this.currProduct.id, id);
   }
+
+  acceptOffer(offeredProdId: string) {
+    const thisOffer = this.currProduct.offers.filter((offer) => {
+      console.log(offer);
+
+      return offer.forProduct === offeredProdId;
+    })[0];
+    this.tradeService.acceptOffer(thisOffer._id);
+  }
+
   ngOnDestroy() {
     this.authStatusSubscription.unsubscribe();
   }

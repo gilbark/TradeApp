@@ -16,7 +16,15 @@ exports.newOffer = (req, res, next) => {
     });
   });
 
-  Product.find().then((res) => console.log(res));
+  Product.findOne({ _id: trade.offeredProduct }).then((product) => {
+    product.offers.push(trade._id);
+    product.save().then((result) => {
+      product.forProduct = req.body.offeredId;
+      product.OfferedProduct = req.body.forId;
+      product.save().then((result) => {});
+    });
+  });
+
   // Attempt save trade
   trade
     .save()
@@ -28,15 +36,49 @@ exports.newOffer = (req, res, next) => {
     });
 };
 
-exports.cancelOffer = (req, res, next) => {};
-exports.getMyOffers = (req, res, next) => {
-  // Get my user
-  Product.find({
-    owner: req.params.id,
-  }).then((products) => {
-    res.status(200).json({ offers: products });
-  });
-  // Get my user products
-  // For each product ID, check if there's an offer, if so append to response
+exports.acceptOffer = (req, res, next) => {
+  let acceptingUserId;
+  let offeringUserId;
+
+  Trade.findOneAndUpdate({ _id: req.params.id }, { confirmedTrade: true }).then(
+    (trade) => {
+      // Accepting userId
+      Product.findOneAndUpdate({ _id: trade.forProduct }).then((product) =>
+        User.findOne({ _id: product.owner }).then(
+          (user) => (acceptingUserId = user._id)
+        )
+      );
+
+      // Offering userId
+      Product.findOneAndUpdate({ _id: trade.offeredProduct }).then((product) =>
+        User.findOne({ _id: product.owner }).then(
+          (user) => (offeringUserId = user._id)
+        )
+      );
+
+      // Change the products between the users and reset offers
+      // Change the owner of offered product
+      Product.findOneAndUpdate(
+        { owner: acceptingUserId },
+        { owner: offeringUserId, offers: [] }
+      ).then((product) => {
+        product.save().then((result) => {
+          console.log(result);
+        });
+      });
+
+      // Change the owner of accepted product
+      Product.findOneAndUpdate(
+        { owner: offeringUserId },
+        { owner: acceptingUserId, offers: [] }
+      ).then((product) => {
+        product.save().then((result) => {
+          console.log(result);
+        });
+      });
+
+      // Save the trade with the updated value
+      trade.save();
+    }
+  );
 };
-exports.acceptOffer = (req, res, next) => {};

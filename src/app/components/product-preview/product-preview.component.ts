@@ -27,6 +27,9 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   userLoggedIn = true;
   viewingMyProducts = true;
   userId: string;
+  alreadyOffered = false;
+  myProducts: Product[] = [];
+  myProductOffers = [];
   private authStatusSubscription: Subscription;
 
   constructor(
@@ -50,8 +53,31 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
     // If in my-products, filter by user's own products (currently filtered on frontend)
     if (this.router.url === "/my-products") {
       this.viewingMyProducts = true;
+
+      this.myProductOffers = this.productService
+        .getMyProducts()
+        .map((product) => {
+          return product.offers;
+        })[0]
+        .filter((offer) => offer.offeredProduct === this.product.id);
     } else {
       this.viewingMyProducts = false;
+      if (this.product.offers.length > 0) {
+        // Check if the offers for this product are any of my own products
+        this.myProducts = this.productService.getMyProducts();
+        this.myProducts
+          .map((products) => products.id)
+          .forEach((pId) => {
+            if (this.product.offers.some((offer) => offer.forProduct === pId)) {
+              this.alreadyOffered = true;
+            } else {
+            }
+          });
+      } else {
+        this.myProducts = this.productService.getMyProducts();
+
+        this.alreadyOffered = false;
+      }
     }
   }
 

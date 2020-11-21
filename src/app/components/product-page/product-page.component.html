@@ -32,7 +32,10 @@
   </div>
 </div>
 <hr />
-<div class="offer-section">
+<div class="offer-section" *ngIf="!myProduct && !alreadyOffered">
   <h1>Offer one of your products:</h1>
   <app-offer [currProduct]="product"></app-offer>
+</div>
+<div *ngIf="alreadyOffered">
+  <h1>You are already in a trade with this product</h1>
 </div>

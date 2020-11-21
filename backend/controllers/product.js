@@ -28,14 +28,13 @@ exports.addProduct = (req, res, next) => {
 };
 
 exports.getMyProducts = (req, res, next) => {
-  console.log("in my products");
-  Product.find()
+  Product.find({ _id: req.params.id })
     .populate("owner")
     .exec((err, products) => {
       if (!products) {
-        console.log("no products");
         return res.status(500).json({ message: "Unable to retrieve products" });
       }
+
       res.status(200).json({ transformedProducts });
     })
     .catch((err) => {
@@ -78,8 +77,14 @@ exports.updateProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  let query;
+  if (req.params.id) {
+    query = Product.find({ owner: req.params.id });
+  } else {
+    query = Product.find();
+  }
   // Find and populate the owner on products
-  Product.find()
+  query
     .populate("owner")
     .populate("offers")
     .exec((err, products) => {
@@ -87,6 +92,7 @@ exports.getProducts = (req, res, next) => {
         return res.status(500).json({ message: "Unable to retrieve products" });
       }
       // Map and transform the products from request
+
       const transformedProducts = products.map((product) => {
         return {
           condition: product.condition,

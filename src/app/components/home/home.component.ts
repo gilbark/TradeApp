@@ -42,18 +42,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.productsSubscription = this.productService
       .getProductsSubject()
       .subscribe((products) => {
-        // Get all products from DB or my products if on my-products
-        if (this.router.url === "/my-products") {
-          this.products = products.filter(
-            (product) => product.owner._id === this.userId
-          );
-          this.inMyProducts = true;
-        } else {
-          this.products = products;
-          this.inMyProducts = false;
-        }
+        this.products = products;
       });
-    this.productService.getProducts();
+    // Get all products from DB or my products if on my-products
+
+    if (this.router.url === "/my-products") {
+      this.inMyProducts = true;
+    } else {
+      this.inMyProducts = false;
+    }
+    
+    this.productService.getProducts(this.inMyProducts ? this.userId : "");
   }
 
   ngOnDestroy() {

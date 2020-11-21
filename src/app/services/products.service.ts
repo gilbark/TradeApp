@@ -39,9 +39,12 @@ export class ProductsService {
   }
 
   // Get all products from backend, and transform into a frontend Product object
-  getProducts() {
+  getProducts(id?: string) {
+    id = id ? id : "";
+    console.log(BACKEND_URL + id);
+
     this.http
-      .get<{ transformedProducts: any }>(BACKEND_URL)
+      .get<{ transformedProducts: any }>(BACKEND_URL + id)
       .pipe(
         map((productData) => {
           return {
@@ -54,7 +57,12 @@ export class ProductsService {
                 condition: product.condition,
                 owner: product.owner,
                 tags: product.tags,
-                offers: product.offers,
+                offers: product.offers.map((offers) => {
+                  return {
+                    forProduct: offers.offeredProduct,
+                    offeredProduct: offers.forProduct,
+                  };
+                }),
               };
             }),
           };
@@ -110,11 +118,11 @@ export class ProductsService {
     // If there's an ID, perform update, if not, perform post
     if (id) {
       this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {
-        this.getNewProducts();
+        this.getProducts(product.owner._id);
       });
     } else {
       this.http.post(BACKEND_URL, productData).subscribe((responseData) => {
-        this.getNewProducts();
+        this.getProducts(product.owner._id);
       });
     }
 

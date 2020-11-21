@@ -56,11 +56,11 @@
         Delete
       </a>
       <div class="accordion-container" *ngIf="userLoggedIn">
-        <mat-accordion *ngIf="viewingMyProducts && product.offers.length > 0">
+        <mat-accordion *ngIf="viewingMyProducts && myProductOffers.length > 0">
           <mat-expansion-panel hideToggle="true">
             <mat-expansion-panel-header>
               <button mat-button class="offers">
-                Offers ({{ product.offers.length }})
+                Offers ({{ myProductOffers.length }})
               </button>
             </mat-expansion-panel-header>
             <app-offer [currProduct]="product"></app-offer>
@@ -70,9 +70,21 @@
         <mat-accordion *ngIf="userLoggedIn && product.owner._id !== userId">
           <mat-expansion-panel hideToggle="true">
             <mat-expansion-panel-header>
-              <button mat-button class="offer">Offer</button>
+              <button
+                mat-button
+                [ngClass]="!alreadyOffered ? 'offer' : 'disabled-offer'"
+              >
+                Offer
+              </button>
             </mat-expansion-panel-header>
-            <app-offer [currProduct]="product"></app-offer>
+            <app-offer
+              *ngIf="!alreadyOffered"
+              [currProduct]="product"
+              [myProducts]="myProducts"
+            ></app-offer>
+            <p *ngIf="alreadyOffered">
+              You are already in a trade with this product
+            </p>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
