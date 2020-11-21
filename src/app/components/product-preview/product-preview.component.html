@@ -81,6 +81,7 @@
               *ngIf="!alreadyOffered"
               [currProduct]="product"
               [myProducts]="myProducts"
+              (offerInitiated)="switchOffered($event)"
             ></app-offer>
             <p *ngIf="alreadyOffered">
               You are already in a trade with this product

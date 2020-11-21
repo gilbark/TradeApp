@@ -1,7 +1,4 @@
 
-++ Offer functionality
-    1 day
-
 ++ Paging 
 ++ Filtering
 ++ Form field validators

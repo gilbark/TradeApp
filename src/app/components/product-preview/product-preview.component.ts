@@ -14,6 +14,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "src/app/services/auth.service";
 import { Subscription } from "rxjs";
 import { StarRatingComponent } from "ng-starrating";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-product-preview",
@@ -36,7 +37,8 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
     private productService: ProductsService,
     private router: Router,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -103,6 +105,12 @@ export class ProductPreviewComponent implements OnInit, OnDestroy {
   }) {
     this.authService.updateUserRating(this.product.owner._id, $event.newValue);
   }
+
+  switchOffered(event) {
+    this.alreadyOffered = event;
+    this._snackBar.open("Offer submitted!", "Dismiss", { duration: 2500 });
+  }
+
 
   ngOnDestroy() {
     this.authStatusSubscription.unsubscribe();

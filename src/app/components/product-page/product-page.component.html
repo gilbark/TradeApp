@@ -34,7 +34,10 @@
 <hr />
 <div class="offer-section" *ngIf="!myProduct && !alreadyOffered">
   <h1>Offer one of your products:</h1>
-  <app-offer [currProduct]="product"></app-offer>
+  <app-offer
+    [currProduct]="product"
+    (offerInitiated)="switchOffered($event)"
+  ></app-offer>
 </div>
 <div *ngIf="alreadyOffered">
   <h1>You are already in a trade with this product</h1>

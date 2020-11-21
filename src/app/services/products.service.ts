@@ -41,7 +41,6 @@ export class ProductsService {
   // Get all products from backend, and transform into a frontend Product object
   getProducts(id?: string) {
     id = id ? id : "";
-    console.log(BACKEND_URL + id);
 
     this.http
       .get<{ transformedProducts: any }>(BACKEND_URL + id)
@@ -61,6 +60,7 @@ export class ProductsService {
                   return {
                     forProduct: offers.offeredProduct,
                     offeredProduct: offers.forProduct,
+                    _id: offers._id,
                   };
                 }),
               };

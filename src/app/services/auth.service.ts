@@ -1,4 +1,3 @@
-import { User } from "./../models/user.model";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -114,7 +113,12 @@ export class AuthService {
     this.authStatusListener.next(false);
     clearTimeout(this.timer);
     this.clearAuthData();
-    this.router.navigate(["/"]);
+
+    if (this.router.url === "/") {
+      window.location.reload();
+    } else {
+      this.router.navigate(["/"]);
+    }
   }
 
   // Checks if user's token is in their localstorage and is valid, if so, automatically log them in
@@ -140,9 +144,7 @@ export class AuthService {
       .post<{ newRating: number }>(BACKEND_URL + userId, {
         ratingToAdd: newRating,
       })
-      .subscribe((response) => {
-        console.log("User's new rating is: " + response.newRating);
-      });
+      .subscribe((response) => {});
   }
 
   // Remove token from localstorage

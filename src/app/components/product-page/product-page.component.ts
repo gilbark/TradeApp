@@ -5,6 +5,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Offer } from "src/app/models/offer.model";
 import { Subscription } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-product-page",
@@ -24,7 +25,8 @@ export class ProductPageComponent implements OnInit {
   constructor(
     private productService: ProductsService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -56,8 +58,7 @@ export class ProductPageComponent implements OnInit {
 
     this.productService.getProductsSubject().subscribe((products) => {
       this.products = products;
-      const offeredToThis = this.products.map((ps) => ps.offers)[0];
-      console.log(offeredToThis);
+      const offeredToThis = this.products.map((ps) => ps.offers)[1];
       if (
         offeredToThis.filter(
           (offered) => offered.forProduct === this.product.id
@@ -66,5 +67,10 @@ export class ProductPageComponent implements OnInit {
         this.alreadyOffered = true;
       }
     });
+  }
+
+  switchOffered(event) {
+    this.alreadyOffered = event;
+    this._snackBar.open("Offer submitted!", "Dismiss", { duration: 2500 });
   }
 }

@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.inMyProducts = false;
     }
-    
+
     this.productService.getProducts(this.inMyProducts ? this.userId : "");
   }
 

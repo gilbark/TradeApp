@@ -3,9 +3,17 @@ import { Router } from "@angular/router";
 import { TradeService } from "./../../services/trade.service";
 import { AuthService } from "src/app/services/auth.service";
 import { ProductsService } from "./../../services/products.service";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { Product } from "src/app/models/product.model";
 import { Subscription } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-offer",
@@ -21,6 +29,7 @@ export class OfferComponent implements OnInit, OnDestroy {
   // Gets the product the user has opened this component from
   @Input() currProduct: Product;
   @Input() myProducts?: Product[];
+  @Output() offerInitiated: EventEmitter<boolean> = new EventEmitter<boolean>();
   // Private properties
   private userId: string;
   private authStatusSubscription: Subscription;
@@ -30,7 +39,8 @@ export class OfferComponent implements OnInit, OnDestroy {
     private productService: ProductsService,
     private authService: AuthService,
     private tradeService: TradeService,
-    private router: Router
+    private router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -71,15 +81,19 @@ export class OfferComponent implements OnInit, OnDestroy {
   }
   submitOffer(id: string) {
     this.tradeService.createTrade(this.currProduct.id, id);
+    this.offerInitiated.emit(true);
   }
 
   acceptOffer(offeredProdId: string) {
     const thisOffer = this.currProduct.offers.filter((offer) => {
-      console.log(offer);
-
       return offer.forProduct === offeredProdId;
     })[0];
+
     this.tradeService.acceptOffer(thisOffer._id);
+
+    this._snackBar.open("Your trade has been completed!", "Dismiss", {
+      duration: 2500,
+    });
   }
 
   ngOnDestroy() {

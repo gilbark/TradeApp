@@ -42,43 +42,56 @@ exports.acceptOffer = (req, res, next) => {
 
   Trade.findOneAndUpdate({ _id: req.params.id }, { confirmedTrade: true }).then(
     (trade) => {
-      // Accepting userId
-      Product.findOneAndUpdate({ _id: trade.forProduct }).then((product) =>
-        User.findOne({ _id: product.owner }).then(
-          (user) => (acceptingUserId = user._id)
-        )
-      );
+      Product.findOne({ _id: trade.forProduct }).then((product) => {
+        User.findOne({ _id: product.owner._id }).then((aUser) => {
+          // Accepting userId
+          acceptingUserId = aUser._id;
+          // Offering userId
+          Product.findOne({ _id: trade.offeredProduct }).then((product) => {
+            User.findOne({ _id: product.owner._id })
+              .then((oUser) => (offeringUserId = oUser._id))
+              .then(() => {
+                console.log(acceptingUserId + " - " + offeringUserId);
 
-      // Offering userId
-      Product.findOneAndUpdate({ _id: trade.offeredProduct }).then((product) =>
-        User.findOne({ _id: product.owner }).then(
-          (user) => (offeringUserId = user._id)
-        )
-      );
+                // Change the products between the users and reset offers
+                // Change the owner of offered product
+                Product.findOneAndUpdate(
+                  { owner: acceptingUserId },
+                  { owner: offeringUserId, offers: [] }
+                ).then((product) => {
+                  console.log(product);
+                  product.save().then((result) => {
+                    console.log(result);
+                  });
+                });
 
-      // Change the products between the users and reset offers
-      // Change the owner of offered product
-      Product.findOneAndUpdate(
-        { owner: acceptingUserId },
-        { owner: offeringUserId, offers: [] }
-      ).then((product) => {
-        product.save().then((result) => {
-          console.log(result);
+                // Change the owner of accepted product
+                Product.findOneAndUpdate(
+                  { owner: offeringUserId },
+                  { owner: acceptingUserId, offers: [] }
+                ).then((product) => {
+                  console.log(product);
+                  product.save().then((result) => {
+                    console.log(result);
+                  });
+                });
+              })
+              .then(() => {
+                // Save the trade with the updated value
+                trade
+                  .save()
+                  .then((result) => {
+                    res.status(200).json({ message: "Successfuly traded" });
+                  })
+                  .catch((Err) => {
+                    return res
+                      .status(500)
+                      .json({ message: "Couldn't complete trade" });
+                  });
+              });
+          });
         });
       });
-
-      // Change the owner of accepted product
-      Product.findOneAndUpdate(
-        { owner: offeringUserId },
-        { owner: acceptingUserId, offers: [] }
-      ).then((product) => {
-        product.save().then((result) => {
-          console.log(result);
-        });
-      });
-
-      // Save the trade with the updated value
-      trade.save();
     }
   );
 };
