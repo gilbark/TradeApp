@@ -14,6 +14,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { RatingModule } from "ng-starrating";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 const matModules: any[] = [
   MatCardModule,
@@ -28,6 +29,7 @@ const matModules: any[] = [
   MatChipsModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({

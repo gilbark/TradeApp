@@ -77,12 +77,25 @@ exports.updateProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  // Set query parameters for pagination
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  let myProducts = false;
+
+  // Set up query for all products or my products
   let query;
   if (req.params.id) {
     query = Product.find({ owner: req.params.id });
+    myProducts = true;
   } else {
     query = Product.find();
   }
+
+  // If there are any query params for pagination, set here
+  if (pageSize && currentPage) {
+    query.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+
   // Find and populate the owner on products
   query
     .populate("owner")
@@ -110,7 +123,19 @@ exports.getProducts = (req, res, next) => {
           offers: product.offers,
         };
       });
-      res.status(200).json({ transformedProducts });
+
+      // If the call is for my products, return the products + count by user's ID
+      if (myProducts) {
+        Product.find({ owner: req.params.id })
+          .count()
+          .then((count) => {
+            res.status(200).json({ transformedProducts, count });
+          });
+      } else {
+        Product.count().then((count) => {
+          res.status(200).json({ transformedProducts, count });
+        });
+      }
     });
 };
 

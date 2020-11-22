@@ -34,13 +34,13 @@ export class AuthService {
   createUser(form: any) {
     // Get data from form and map to a data body which the API knows
     const userToCreate = {
-      email: form.form.value.email,
-      username: form.form.value.username,
-      password: form.form.value.password,
+      email: form.value.email,
+      username: form.value.username,
+      password: form.value.password,
       address: {
-        address: form.form.value.address,
-        country: form.form.value.country,
-        city: form.form.value.city,
+        address: form.value.address,
+        country: form.value.country,
+        city: form.value.city,
       },
     };
 

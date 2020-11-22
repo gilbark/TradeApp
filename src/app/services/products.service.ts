@@ -15,6 +15,7 @@ const BACKEND_URL = environment.apiUrl + "/products/";
 export class ProductsService {
   private productsChangedSubject = new Subject<Product[]>();
   private products: Product[] = [];
+  private productCount: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -39,11 +40,15 @@ export class ProductsService {
   }
 
   // Get all products from backend, and transform into a frontend Product object
-  getProducts(id?: string) {
+  getProducts(id?: string, productsPerPage?: number, currentPage?: number) {
     id = id ? id : "";
+    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+    console.log(BACKEND_URL + id + queryParams);
 
     this.http
-      .get<{ transformedProducts: any }>(BACKEND_URL + id)
+      .get<{ transformedProducts: any; count: number }>(
+        BACKEND_URL + id + queryParams
+      )
       .pipe(
         map((productData) => {
           return {
@@ -65,14 +70,22 @@ export class ProductsService {
                 }),
               };
             }),
+            count: productData.count,
           };
         })
       )
       .subscribe((transformedProductData) => {
+        // Set total products in db
+        this.productCount = transformedProductData.count;
+
         // Transmit all products to components
         this.products = transformedProductData.products;
         this.productsChangedSubject.next([...this.products]);
       });
+  }
+
+  getMaxProducts() {
+    return this.productCount;
   }
 
   getProductsSubject() {
@@ -118,11 +131,11 @@ export class ProductsService {
     // If there's an ID, perform update, if not, perform post
     if (id) {
       this.http.put(BACKEND_URL + id, productData).subscribe((responseData) => {
-        this.getProducts(product.owner._id);
+        this.getProducts(product.owner._id, 5, 1);
       });
     } else {
       this.http.post(BACKEND_URL, productData).subscribe((responseData) => {
-        this.getProducts(product.owner._id);
+        this.getProducts(product.owner._id, 5, 1);
       });
     }
 

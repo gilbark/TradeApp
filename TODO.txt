@@ -1,9 +1,10 @@
-
-++ Paging 
-++ Filtering
-++ Form field validators
-    1 day
-
-++ Search by tags implementation
-    1-2 day
-
+++ Extras: 
+    ++ Search by tags implementation
+        1-2 days
+    ++ Sign up location with google places API
+        0.5 day
+    ++ Recommendations module
+        ++ Front end
+            + 1-2 days
+        ++ Back end
+            + 1-2 days
