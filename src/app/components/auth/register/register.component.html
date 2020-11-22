@@ -1,16 +1,16 @@
 <mat-card>
-  <form (submit)="onSignup(signupForm)" #signupForm="ngForm">
+  <form (submit)="onSignup()" [formGroup]="signupForm">
     <div class="user-info">
       <mat-form-field>
         <input
           matInput
+          required
+          formControlName="email"
           type="email"
           name="email"
-          ngModel
-          required
           email
           placeholder="E-Mail"
-          #emailInput="ngModel"
+          #emailInput
         />
         <mat-error *ngIf="!emailInput.valid">
           Please enter a valid Email address
@@ -19,12 +19,12 @@
       <mat-form-field>
         <input
           matInput
+          required
+          formControlName="username"
           type="text"
           name="username"
-          ngModel
-          required
           placeholder="Username"
-          #usernameInput="ngModel"
+          #usernameInput
         />
         <mat-error *ngIf="!usernameInput.valid">
           Please enter a valid username
@@ -33,15 +33,16 @@
       <mat-form-field>
         <input
           matInput
+          required
+          formControlName="password"
           type="password"
           name="password"
-          ngModel
-          required
           placeholder="Password"
-          #passwordInput="ngModel"
+          #passwordInput
         />
         <mat-error *ngIf="!passwordInput.valid">
-          Please enter a valid password
+          Password should be 5 - 20 characters long and should contain one
+          number, one uppercase letter and one lowercase letter.
         </mat-error>
       </mat-form-field>
     </div>
@@ -52,12 +53,12 @@
         <mat-form-field>
           <input
             matInput
+            required
+            formControlName="country"
             type="text"
             name="country"
-            ngModel
-            required
             placeholder="Country"
-            #countryInput="ngModel"
+            #countryInput
           />
           <mat-error *ngIf="!countryInput.valid">
             Please enter a valid country
@@ -66,12 +67,12 @@
         <mat-form-field>
           <input
             matInput
+            required
+            formControlName="city"
             type="text"
             name="city"
-            ngModel
-            required
             placeholder="City"
-            #cityInput="ngModel"
+            #cityInput
           />
           <mat-error *ngIf="!cityInput.valid">
             Please enter a valid city
@@ -80,12 +81,12 @@
         <mat-form-field>
           <input
             matInput
-            type="text"
-            name="address"
-            ngModel
             required
+            type="text"
+            formControlName="address"
+            name="address"
             placeholder="Address"
-            #addressInput="ngModel"
+            #addressInput
           />
           <mat-error *ngIf="!addressInput.valid">
             Please enter a valid address

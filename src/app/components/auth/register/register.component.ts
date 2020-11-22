@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormControl, FormGroup, NgForm, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { AuthService } from "src/app/services/auth.service";
 
@@ -10,22 +10,47 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
-
+  signupForm: FormGroup;
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((authStatus) => {
-        console.log(authStatus);
+        // console.log(authStatus);
       });
+    this.signupForm = new FormGroup({
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email],
+      }),
+      username: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      password: new FormControl(null, {
+        validators: [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(20),
+          Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$"),
+        ],
+      }),
+      country: new FormControl(null, {
+        validators: [Validators.required],
+      }),
+      city: new FormControl(null, {
+        validators: [Validators.required],
+      }),
+      address: new FormControl(null, {
+        validators: [Validators.required],
+      }),
+    });
   }
 
-  onSignup(form: NgForm) {
-    if (form.invalid) {
+  onSignup() {
+    if (this.signupForm.invalid) {
       return;
     }
-    this.authService.createUser(form);
+    this.authService.createUser(this.signupForm);
   }
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
